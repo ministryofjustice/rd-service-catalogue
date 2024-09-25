@@ -1,0 +1,31 @@
+---
+title: "AI Nexus"
+date-modified: today
+comments: false
+listing:
+    id: main-listing
+    type: table
+    contents:
+        - listings/**.yaml
+    sort:
+        - "title desc"
+    sort-ui: [title, date-updated, description, categories, organisation]
+    filter-ui: true
+    categories: false
+    date-format: medium
+    max-items: 50
+    table-hover: true
+    image-placeholder: /./_static/Moj_logo_uk.png
+    fields: [image, title, date-updated, description, organisation, categories]
+    field-display-names:
+      date-updated: "Updated"
+      organisation: "Organisation"
+    feed: true
+---
+
+## GitHub Projects
+
+Note that in this version, only public repositories are available. 
+
+::: {#main-listing}
+:::
