@@ -4,4 +4,4 @@
   path: "{REPO_URL}"
   organisation: {ORG_NM}
   categories: {TOPIC_LIST}
-  image: /./_static/Moj_logo_uk.png
+  image: /./www/Moj_logo_uk.png

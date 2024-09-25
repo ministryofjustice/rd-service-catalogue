@@ -1,7 +1,7 @@
 project:
   type: website
   resources:
-  - /./_static/* 
+  - /./www/
   - /./listings/
   output-dir: docs
   render:
