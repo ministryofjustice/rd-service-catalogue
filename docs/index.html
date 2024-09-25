@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AI Nexus</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href=".//./favicon.ico" rel="icon">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-main-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-date-updated','listing-description','listing-organisation','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-title-sort'] }],
+      page: 30,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
+      searchColumns: ["listing-title","listing-description","listing-date-updated","listing-organisation","listing-categories","listing-image"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-main-listing'] = new List('listing-main-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="alternate" type="application/rss+xml" title="AI Nexus" href="index.xml" data-external="1"></head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AI Nexus Homepage</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">AI Nexus</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 25, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="github-projects" class="level2">
+<h2 class="anchored" data-anchor-id="github-projects">GitHub Projects</h2>
+<p>Note that in this version, only public repositories are available.</p>
+<div id="listing-main-listing" class="quarto-listing quarto-listing-container-table">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-main-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-main-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title-sort" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-updated" data-direction="asc">
+          Updated
+        </option>
+         <option value="listing-description" data-direction="asc">
+          Description
+        </option>
+         <option value="listing-categories" data-direction="asc">
+          Categories
+        </option>
+         <option value="listing-organisation" data-direction="asc">
+          Organisation
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
+</div>
+<table class="quarto-listing-table table table-hover">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-date-updated" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Updated</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-description" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Description</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-organisation" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Organisation</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-categories" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Categories</a>
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="" data-listing-title-sort="zf-test-case-behat-extension" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/zf-test-case-behat-extension" class="title listing-title">zf-test-case-behat-extension</a>
+</td>
+<td>
+<span class="listing-date-updated">2020-04-15T18:50:57Z</span>
+</td>
+<td>
+<span class="listing-description">Integration testing for ZF MVC applications in Behat by exposing ZendTest classes (originally built for PHPUnit)</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="1" data-categories="" data-listing-title-sort="zendesk_sinatra" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/zendesk_sinatra" class="title listing-title">zendesk_sinatra</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-04-04T08:46:06Z</span>
+</td>
+<td>
+<span class="listing-description">Connect to your zendesk API using sinatra</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="2" data-categories="" data-listing-title-sort="zendesk_sanitizer" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/zendesk_sanitizer" class="title listing-title">zendesk_sanitizer</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T05:08:06Z</span>
+</td>
+<td>
+<span class="listing-description">Purge sensitive data from Zendesk tickets.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="3" data-categories="" data-listing-title-sort="zen_aggregator" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/zen_aggregator" class="title listing-title">zen_aggregator</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T05:07:56Z</span>
+</td>
+<td>
+<span class="listing-description">A small Django app for aggregating a team’s Zendesk scores</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="4" data-categories="" data-listing-title-sort="xoen-test" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/xoen-test" class="title listing-title">xoen-test</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T03:55:28Z</span>
+</td>
+<td>
+<span class="listing-description">This is a test repository</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="5" data-categories="r,package,excelwriter,cross-tabulation,pivot-tables,formatter,contingency-table,excel,excel-export,cran" data-listing-title-sort="xltabr" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/moj-analytical-services/xltabr" class="title listing-title">xltabr</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-08-24T11:03:10Z</span>
+</td>
+<td>
+<span class="listing-description">xltabr: An R package for writing formatted cross tabulations (contingency tables) to Excel using openxlsx</span>
+</td>
+<td>
+<span class="listing-organisation">moj-analytical-services</span>
+</td>
+<td>
+<span class="listing-categories">r, package, excelwriter, cross-tabulation, pivot-tables, formatter, contingency-table, excel, excel-export, cran</span>
+</td>
+</tr>
+<tr data-index="6" data-categories="" data-listing-title-sort="xgov-ctf-info" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/xgov-ctf-info" class="title listing-title">xgov-ctf-info</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T05:07:59Z</span>
+</td>
+<td>
+<span class="listing-description">Info for the MoJ Cross-Government CTF Competition</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="7" data-categories="" data-listing-title-sort="x-moj-auth" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/x-moj-auth" class="title listing-title">x-moj-auth</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T05:08:03Z</span>
+</td>
+<td>
+<span class="listing-description">prototype ruby/rack based auth service</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="8" data-categories="training" data-listing-title-sort="writing_functions_in_r" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/moj-analytical-services/writing_functions_in_r" class="title listing-title">writing_functions_in_r</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-07-01T10:03:42Z</span>
+</td>
+<td>
+<span class="listing-description">How to write functions in R</span>
+</td>
+<td>
+<span class="listing-organisation">moj-analytical-services</span>
+</td>
+<td>
+<span class="listing-categories">training</span>
+</td>
+</tr>
+<tr data-index="9" data-categories="wp,wordpress,themes,moj" data-listing-title-sort="wp-victcomm2" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-victcomm2" class="title listing-title">wp-victcomm2</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-09-20T21:33:45Z</span>
+</td>
+<td>
+<span class="listing-description">Victims’ Commissioner WP theme</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, wordpress, themes, moj</span>
+</td>
+</tr>
+<tr data-index="10" data-categories="wp,moj" data-listing-title-sort="wp-victcomm" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-victcomm" class="title listing-title">wp-victcomm</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-09-20T21:39:01Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for Victims Commissioner</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="11" data-categories="" data-listing-title-sort="wp-userfeedback" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-userfeedback" class="title listing-title">wp-userfeedback</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T03:55:26Z</span>
+</td>
+<td>
+<span class="listing-description">This is prototype for a Tactical Products wide user feedback tool</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="12" data-categories="wp,moj" data-listing-title-sort="wp-user-roles" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-user-roles" class="title listing-title">wp-user-roles</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-04-08T13:29:53Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress plugin to create typically required user roles for MOJ Digital</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="13" data-categories="" data-listing-title-sort="wp-testapp" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-testapp" class="title listing-title">wp-testapp</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-27T22:54:43Z</span>
+</td>
+<td>
+<span class="listing-description">None</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="14" data-categories="wp,moj" data-listing-title-sort="wp-template" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-template" class="title listing-title">wp-template</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T00:36:57Z</span>
+</td>
+<td>
+<span class="listing-description">A starter project for WordPress in MOJ using docker</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="15" data-categories="wp,moj,jotw" data-listing-title-sort="wp-taxcentreofexcellence" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-taxcentreofexcellence" class="title listing-title">wp-taxcentreofexcellence</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T09:09:38Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress site for the Tax Centre of Excellence</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj, jotw</span>
+</td>
+</tr>
+<tr data-index="16" data-categories="" data-listing-title-sort="wp-sumu" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-sumu" class="title listing-title">wp-sumu</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T00:36:58Z</span>
+</td>
+<td>
+<span class="listing-description">This utility provides a collection of bash scripts that can be used for a variety of tasks such as; applying software updates to website dependencies located in a bedrock structured website. It also contains helper commands to assist in local development.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="17" data-categories="wp,moj" data-listing-title-sort="wp-sifocc" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-sifocc" class="title listing-title">wp-sifocc</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:29:35Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress build and theme for SIFOCC site.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="18" data-categories="" data-listing-title-sort="wp-s3-uploads" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-s3-uploads" class="title listing-title">wp-s3-uploads</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-02-15T10:39:34Z</span>
+</td>
+<td>
+<span class="listing-description">The WordPress Plugin to Store Uploads on Amazon S3</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="19" data-categories="ministry-of-justice,wp,intranet,moj" data-listing-title-sort="wp-rewrite-media-to-s3" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-rewrite-media-to-s3" class="title listing-title">wp-rewrite-media-to-s3</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-01-15T15:18:57Z</span>
+</td>
+<td>
+<span class="listing-description">A WordPress plugin which rewrites media attachment URLs to S3.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">ministry-of-justice, wp, intranet, moj</span>
+</td>
+</tr>
+<tr data-index="20" data-categories="" data-listing-title-sort="wp-registry-client" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-registry-client" class="title listing-title">wp-registry-client</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T10:10:11Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress plugin for WP Registry</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="21" data-categories="" data-listing-title-sort="wp-registry" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-registry" class="title listing-title">wp-registry</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T05:08:07Z</span>
+</td>
+<td>
+<span class="listing-description">Application to capture and display a dashboard of information about WordPress installs in the Publishing Platform.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="22" data-categories="moj,wp,ppo" data-listing-title-sort="wp-ppo" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-ppo" class="title listing-title">wp-ppo</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:28:55Z</span>
+</td>
+<td>
+<span class="listing-description">Prisons and Probation Ombudsman website (Wordpress)</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">moj, wp, ppo</span>
+</td>
+</tr>
+<tr data-index="23" data-categories="wp,moj,ppj" data-listing-title-sort="wp-ppj" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-ppj" class="title listing-title">wp-ppj</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-10-16T11:41:58Z</span>
+</td>
+<td>
+<span class="listing-description">A website to facilitate hiring MoJ prison and probation roles</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj, ppj</span>
+</td>
+</tr>
+<tr data-index="24" data-categories="wp,wordpress-theme,moj" data-listing-title-sort="wp-pds" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-pds" class="title listing-title">wp-pds</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:28:27Z</span>
+</td>
+<td>
+<span class="listing-description">Website template for the Public Defender Service</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, wordpress-theme, moj</span>
+</td>
+</tr>
+<tr data-index="25" data-categories="" data-listing-title-sort="wp-opgsenior" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-opgsenior" class="title listing-title">wp-opgsenior</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T21:03:50Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for the OPG Senior Leaders blog</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="26" data-categories="wp,moj" data-listing-title-sort="wp-npm" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-npm" class="title listing-title">wp-npm</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-10-16T11:16:25Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for National Preventative Mechanism</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="27" data-categories="wp,moj" data-listing-title-sort="wp-ncesblog" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-ncesblog" class="title listing-title">wp-ncesblog</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T08:01:38Z</span>
+</td>
+<td>
+<span class="listing-description">NCES Blog</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="28" data-categories="" data-listing-title-sort="wp-natalieceeney" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-natalieceeney" class="title listing-title">wp-natalieceeney</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T10:10:10Z</span>
+</td>
+<td>
+<span class="listing-description">UNUSED. WordPress theme for Natalie Ceeney’s blog.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="29" data-categories="wp,moj" data-listing-title-sort="wp-multisite-base-docker" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-multisite-base-docker" class="title listing-title">wp-multisite-base-docker</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-03-15T12:11:17Z</span>
+</td>
+<td>
+<span class="listing-description">A base docker image for running 12 factor Multisite WordPress applications.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="30" data-categories="" data-listing-title-sort="wp-mscampaigns" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-mscampaigns" class="title listing-title">wp-mscampaigns</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T12:35:23Z</span>
+</td>
+<td>
+<span class="listing-description">A multisite installation for MoJ campaign websites</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="31" data-categories="" data-listing-title-sort="wp-moj-social-share" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-moj-social-share" class="title listing-title">wp-moj-social-share</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T03:43:06Z</span>
+</td>
+<td>
+<span class="listing-description">Drops social share links in content</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="32" data-categories="php,elasticsearch,moj,wordpress,wp,plugin,ministry-of-justice,intranet" data-listing-title-sort="wp-moj-elasticsearch" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-moj-elasticsearch" class="title listing-title">wp-moj-elasticsearch</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-06-15T15:45:03Z</span>
+</td>
+<td>
+<span class="listing-description">WP MoJ ElasticSearch is a companion WordPress plugin to be installed with the ElasticPress plugin.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">php, elasticsearch, moj, wordpress, wp, plugin, ministry-of-justice, intranet</span>
+</td>
+</tr>
+<tr data-index="33" data-categories="wordpress,jotw,plugin,moj,ministry-of-justice,intranet,wp" data-listing-title-sort="wp-moj-components" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-moj-components" class="title listing-title">wp-moj-components</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-04-08T13:31:47Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress plugin that applies common functionality to sites used across the MoJ portfolio.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wordpress, jotw, plugin, moj, ministry-of-justice, intranet, wp</span>
+</td>
+</tr>
+<tr data-index="34" data-categories="wordpress,blocks,plugin,jotw,wp,moj" data-listing-title-sort="wp-moj-blocks" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-moj-blocks" class="title listing-title">wp-moj-blocks</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-09-19T08:20:33Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress plugin that generates MoJ custom Gutenberg blocks.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wordpress, blocks, plugin, jotw, wp, moj</span>
+</td>
+</tr>
+<tr data-index="35" data-categories="wp,theme,layobservers,wordpress,moj" data-listing-title-sort="wp-layobservers" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-layobservers" class="title listing-title">wp-layobservers</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:19:25Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for the Lay Observers website.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, theme, layobservers, wordpress, moj</span>
+</td>
+</tr>
+<tr data-index="36" data-categories="wp,wordpress-theme,wordpress-site,theme,theme-development,moj" data-listing-title-sort="wp-lawcom" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-lawcom" class="title listing-title">wp-lawcom</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:18:43Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for Law Commission</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, wordpress-theme, wordpress-site, theme, theme-development, moj</span>
+</td>
+</tr>
+<tr data-index="37" data-categories="wp,moj" data-listing-title-sort="wp-lambda-deploy" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-lambda-deploy" class="title listing-title">wp-lambda-deploy</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-04-06T12:10:23Z</span>
+</td>
+<td>
+<span class="listing-description">Experimenting with Lambda CodePipeline function</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="38" data-categories="" data-listing-title-sort="wp-knowthething" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-knowthething" class="title listing-title">wp-knowthething</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T03:42:59Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for a weekly update site for MOJ Digital</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="39" data-categories="wordpress,justice,jobs,wp,moj" data-listing-title-sort="wp-justicejobs" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-justicejobs" class="title listing-title">wp-justicejobs</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:27:25Z</span>
+</td>
+<td>
+<span class="listing-description">WP build and theme for Justice Jobs</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wordpress, justice, jobs, wp, moj</span>
+</td>
+</tr>
+<tr data-index="40" data-categories="bedrock,wordpress-plugin,composer,jotw,wordpress,moj,wp" data-listing-title-sort="wp-jotw-public" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-jotw-public" class="title listing-title">wp-jotw-public</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T14:27:00Z</span>
+</td>
+<td>
+<span class="listing-description">Justice On The Web content team WordPress multisite build files.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">bedrock, wordpress-plugin, composer, jotw, wordpress, moj, wp</span>
+</td>
+</tr>
+<tr data-index="41" data-categories="" data-listing-title-sort="wp-joblog" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-joblog" class="title listing-title">wp-joblog</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T16:29:23Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress blog for the Judicial Office.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="42" data-categories="wp,wo" data-listing-title-sort="wp-jcio" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-jcio" class="title listing-title">wp-jcio</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T10:50:34Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for the Judicial Conduct Investigations Office</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, wo</span>
+</td>
+</tr>
+<tr data-index="43" data-categories="wp,moj" data-listing-title-sort="wp-intranet-ospt" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-intranet-ospt" class="title listing-title">wp-intranet-ospt</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-12-14T12:40:28Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for Official Solicitor and Public Trustee Intranet migrated from Red Dot</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="44" data-categories="" data-listing-title-sort="wp-intranet-lawcom" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-intranet-lawcom" class="title listing-title">wp-intranet-lawcom</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T15:40:01Z</span>
+</td>
+<td>
+<span class="listing-description">None</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="45" data-categories="" data-listing-title-sort="wp-intranet-joi" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-intranet-joi" class="title listing-title">wp-intranet-joi</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T16:52:26Z</span>
+</td>
+<td>
+<span class="listing-description">None</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+<tr data-index="46" data-categories="moj,wp" data-listing-title-sort="wp-intranet-jac" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-intranet-jac" class="title listing-title">wp-intranet-jac</a>
+</td>
+<td>
+<span class="listing-date-updated">2024-04-23T08:59:25Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress project for the Judicial Appointments Commission intranet site.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">moj, wp</span>
+</td>
+</tr>
+<tr data-index="47" data-categories="wp,moj" data-listing-title-sort="wp-imbmembers" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-imbmembers" class="title listing-title">wp-imbmembers</a>
+</td>
+<td>
+<span class="listing-date-updated">2021-12-08T09:56:47Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress application for IMB Members.</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">wp, moj</span>
+</td>
+</tr>
+<tr data-index="48" data-categories="theme,wordpress,wp,imb,moj" data-listing-title-sort="wp-imb" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-imb" class="title listing-title">wp-imb</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-12T09:39:43Z</span>
+</td>
+<td>
+<span class="listing-description">Independent Monitoring Board Wordpress theme</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories">theme, wordpress, wp, imb, moj</span>
+</td>
+</tr>
+<tr data-index="49" data-categories="" data-listing-title-sort="wp-hmcts-blog" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
+<td>
+<span class="listing-image"><img loading="lazy" data-src="././_static/Moj_logo_uk.png" style="height: 40px;"></span>
+</td>
+<td>
+<a href="https://github.com/ministryofjustice/wp-hmcts-blog" class="title listing-title">wp-hmcts-blog</a>
+</td>
+<td>
+<span class="listing-date-updated">2023-01-28T10:10:08Z</span>
+</td>
+<td>
+<span class="listing-description">WordPress theme for HMCTS blog</span>
+</td>
+<td>
+<span class="listing-organisation">ministryofjustice</span>
+</td>
+<td>
+<span class="listing-categories"></span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+<nav id="main-listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
+</div>
+
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/\.\.\.");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
