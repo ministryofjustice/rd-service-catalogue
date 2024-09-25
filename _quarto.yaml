@@ -14,9 +14,13 @@ website:
   favicon: /./favicon.ico
   site-url: "https://ministryofjustice.github.io/rd-service-catalogue/"
   search: true
+  open-graph: true
   navbar:
     style: floating
     title: "AI Nexus Homepage"
+    left:
+      - icon: rss
+        href: index.xml
 format:
   html:
     theme: 
