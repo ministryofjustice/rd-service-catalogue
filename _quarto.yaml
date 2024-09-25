@@ -1,0 +1,25 @@
+project:
+  type: website
+  resources:
+  - /./_static/* 
+  - /./listings/
+  output-dir: docs
+  render:
+    - "*.qmd"
+    - "!/./catalogue-env/"
+execute:
+  freeze: auto
+website:
+  title: "AI Nexus"
+  favicon: /./favicon.ico
+  site-url: "https://..."
+  search: true
+  navbar:
+    style: floating
+    title: "AI Nexus Homepage"
+format:
+  html:
+    theme: 
+      light: cosmo
+      dark: sandstone
+    toc: false
