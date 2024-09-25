@@ -12,7 +12,7 @@ execute:
 website:
   title: "AI Nexus"
   favicon: /./favicon.ico
-  site-url: "https://..."
+  site-url: "https://ministryofjustice.github.io/rd-service-catalogue/"
   search: true
   navbar:
     style: floating
