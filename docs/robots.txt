@@ -1,1 +1,1 @@
-Sitemap: https://.../sitemap.xml
+Sitemap: https://ministryofjustice.github.io/rd-service-catalogue/sitemap.xml
