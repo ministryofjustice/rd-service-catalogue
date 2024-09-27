@@ -39,6 +39,9 @@ dev = [
     "pytest",
     "hatchling",
 ]
+experiments = [
+    "crewai[tools]",
+]
 frontend = [
 ]
 [project.urls]
