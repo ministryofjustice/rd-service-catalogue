@@ -1,5 +1,7 @@
 """Search for GitHub organisational synergies & trade-offs with CrewAI.
 
+Expects you to update your .env file with OPENAI_KEY = <YOUR_KEY> . Though
+instead you can switch crewai over to use Ollama local models.
 Currently only uses 3 fields from all repos across MoJ GitHub orgs:
 html_url: the url of the githu repo
 description: the free text field the user inputs on creating the repo
