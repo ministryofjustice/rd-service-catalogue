@@ -1,11 +1,39 @@
 """Testing integration with github API."""
+import re
+
 from mockito import when, unstub
 import requests
+import pytest
 
 from ai_nexus import github_api
 
 class TestGetReadmeContent(object):
     """Tests for get_readme_content()."""
+
+
+    def test_get_readme_content_defence(self):
+        """Check defensive logic."""
+        with pytest.raises(
+            TypeError,
+            match="repo_url expected type str. Found <class 'int'>."):
+            github_api.get_readme_content(
+                repo_url=1, pat="foo", agent="bar"
+                )
+        with pytest.raises(
+            ValueError,
+            match=re.escape(
+                "accept expects either application/vnd.github+json or app")
+            ):
+            github_api.get_readme_content(
+                repo_url="foobar", pat="foo", agent="bar", accept="wrong",
+                       )
+        with pytest.raises(
+            ValueError,
+            match="repo_url should begin with 'https://', found http://"
+            ):
+            github_api.get_readme_content(
+                repo_url="http://NOT_SUPPORTED", pat="foo", agent="bar",
+            )
 
 
     def test_get_readme_content(self):
