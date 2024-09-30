@@ -1,3 +1,8 @@
+<!--- Badges start --->
+<img src="https://github.com/ministryofjustice/rd-service-catalogue/actions/workflows/test_pkg.yml/badge.svg" alt="Test suite status"/>
+
+<!--- Badges end --->
+
 # AI Nexus
 
 ## A catalogue of products and services featuring GenAI capabilities.
