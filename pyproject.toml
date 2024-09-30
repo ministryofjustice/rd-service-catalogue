@@ -25,21 +25,20 @@ classifiers = [
     "Operating System :: MacOS",
 ]
 dependencies = [
-    "fastparquet",
-    "pandas",
-    "pyarrow",
-    "pyprojroot",
-    "python-dotenv",
-    "requests",
+    "fastparquet==2024.5.0",
+    "pandas==2.2.3",
+    "pyarrow==17.0.0",
+    "pyprojroot==0.3.0",
+    "python-dotenv==1.0.1",
+    "requests==2.32.3",
     ]
 
 [project.optional-dependencies]
 # Add your optional dependencies here
 dev = [
-    "pytest",
-    "hatchling",
-]
-frontend = [
+    "hatchling==1.25.0",
+    "mockito==1.5.1",
+    "pytest==8.3.3",
 ]
 [project.urls]
 Repository = "https://github.com/ministryofjustice/..."
