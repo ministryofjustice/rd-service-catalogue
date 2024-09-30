@@ -453,6 +453,7 @@ def get_readme_content(
             f"repo_url should begin with 'https://', found {repo_url[0:7]}"
             )
     params = {"accept": accept}
+    # see https://regex101.com/r/KrKdEj/1 for test cases...
     cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
     owner = cap_groups.group(1)
     repo_nm = cap_groups.group(2)  
