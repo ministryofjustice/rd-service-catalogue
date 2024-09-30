@@ -1,6 +1,10 @@
 """Query GitHub api."""
+from base64 import b64decode
+import re
+
 import pandas as pd
-from requests import Session
+from requests import Session, get
+from requests.exceptions import HTTPError
 
 from ai_nexus.requests_utils import _configure_requests
 
@@ -213,7 +217,8 @@ def get_all_org_repo_metadata(
                 params=PARAMS,
             )
         current_row = pd.DataFrame(
-            {"repo_url": repo_url, m: [repo_meta.json()]}) # TODO: conditional handling of topics vs custom properties
+            {"repo_url": repo_url, m: [repo_meta.json()]})
+        # TODO: conditional handling of topics vs custom properties
         all_meta = pd.concat([all_meta, current_row])
 
     return all_meta
@@ -394,3 +399,79 @@ def combine_repo_tables(
     output_table = output_table.merge(reps, how="left", on="repo_url")
 
     return output_table
+
+
+def get_readme_content(
+        repo_url:str,
+        pat:str,
+        agent:str,
+        accept:str="application/vnd.github+json",
+        ):
+    """Fetches the README content from a single GitHub repository.
+
+    Parameters
+    ----------
+    repo_url : str
+        The URL of the GitHub repository.
+    pat : str
+        The personal access token for GitHub API authentication.
+    agent : str
+        The user agent string to be sent with the request.
+    accept : str, optional
+        The media type to accept in the response. Defaults to
+        "application/vnd.github+json".
+
+    Returns
+    -------
+    str
+        The content of the README file.
+
+    Raises
+    ------
+    TypeError
+        If any of the parameters are not of type `str`.
+    ValueError
+        If the `accept` parameter is not one of
+        "application/vnd.github+json" or "application/vnd.github.html+json"
+        or if the `repo_url` does not start with "https://".
+    requests.exceptions.HTTPError
+        If the HTTP request to the GitHub API fails.    
+    """
+    # defence
+    str_params = {
+        "repo_url": repo_url, "pat": pat, "agent": agent, "accept": accept}
+    for k, v in str_params.items():
+        if not isinstance(v, str):
+            raise TypeError(f"{k} expected type str. Found {type(v)}.")     
+    accept_vals = [
+        "application/vnd.github+json", "application/vnd.github.html+json"]
+    if accept not in accept_vals:
+        raise ValueError(
+            f"accept expects either {' or '.join(accept_vals)}")
+    if not repo_url.startswith("https://"):
+        raise ValueError(
+            f"repo_url should begin with 'https://', found {repo_url[0:7]}"
+            )
+    params = {"accept": accept}
+    cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
+    owner = cap_groups.group(1)
+    repo_nm = cap_groups.group(2)  
+    endpoint = f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
+    resp = get(
+        endpoint,
+        params=params,
+        headers={"Authorization": f"Bearer {pat}", "User-Agent": agent},
+        )
+    if resp.ok:
+        content = resp.json()
+        # decode from base64
+        if "content" in content.keys() and content.get(
+            "encoding") == "base64":
+            readme = b64decode(
+                content.get("content")).decode("utf-8")
+    else:
+        raise HTTPError(
+            f"HTTP error {resp.status_code}: {resp.reason}")
+    # TODO: _handle_response_exception()
+    return readme
+    
