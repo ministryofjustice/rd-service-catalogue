@@ -25,3 +25,12 @@ class TestGetReadmeContent(object):
             "https://github.com/owner/repo", "fake_pat", "fake_agent")
         assert result == "This is the README content"
         unstub()
+        # repeat for accept HTML
+        when(requests).get(...).thenReturn(mock_response)
+        result = github_api.get_readme_content(
+            "https://github.com/owner/repo",
+            "fake_pat",
+            "fake_agent",
+            accept="application/vnd.github.html+json"
+        )
+        unstub()
