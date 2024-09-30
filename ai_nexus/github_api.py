@@ -1,6 +1,6 @@
 """Query GitHub api."""
 import pandas as pd
-import requests
+from requests import Session
 
 from ai_nexus.requests_utils import _configure_requests
 
@@ -9,7 +9,7 @@ def _paginated_get(
     pat: str,
     agent: str,
     params: dict = {},
-    sess: requests.Session = _configure_requests(),
+    sess: Session = _configure_requests(),
 ) -> list:
     """Get paginated responses.
 
@@ -23,7 +23,7 @@ def _paginated_get(
         User's browser agent.
     params: dict
         Dictionary of parameters to pass the developer API.
-    sess : requests.Session, optional
+    sess : Session, optional
         Session configured with retry strategy, by default
         _configure_requests() with default values of n=5, backoff_f=0.1,
         force_on=[500, 502, 503, 504]
@@ -74,7 +74,7 @@ def get_org_repos(
     org_nm: str,
     pat: str,
     agent: str,
-    sess: requests.Session = _configure_requests(),
+    sess: Session = _configure_requests(),
     public_only: bool = False,
 ) -> pd.DataFrame:
     """Get repo metadata for all repos in a GitHub organisation.
@@ -87,7 +87,7 @@ def get_org_repos(
         GitHub user PAT
     agent : str,
         User agent, by default USER_AGENT
-    sess : requests.Session, optional
+    sess : Session, optional
         Session configured with retry strategy, by default
         _configure_requests() with default values of n=5, backoff_f=0.1,
         force_on=[500, 502, 503, 504]
@@ -154,7 +154,7 @@ def get_all_org_repo_metadata(
         org_nm: str,
         pat: str,
         agent: str,
-        sess: requests.Session = _configure_requests(),
+        sess: Session = _configure_requests(),
         ) -> pd.DataFrame:
     """Get every repo metadata item for entire org.
 
@@ -173,7 +173,7 @@ def get_all_org_repo_metadata(
         User's PAT code, by default PAT (from .env)
     agent : str,
         User agent string, by default USER_AGENT (from .secrets.toml)
-    sess : requests.Session, optional
+    sess : Session, optional
         Session configured with retry strategy, by default
         _configure_requests() with default values of n=5, backoff_f=0.1,
         force_on=[500, 502, 503, 504]
@@ -225,7 +225,7 @@ def get_all_org_issues(
     pat: str,
     agent: str,
     issue_type="issues",
-    sess: requests.Session = _configure_requests(),
+    sess: Session = _configure_requests(),
 ) -> pd.DataFrame:
     """Get every repo issue for entire org.
 
@@ -243,7 +243,7 @@ def get_all_org_issues(
         User agent string, by default USER_AGENT (from .secrets.toml)
     issue_type : str, optional
         Accepts either 'issues' or 'pulls', by default "issues"
-    sess : requests.Session, optional
+    sess : Session, optional
         Session configured with retry strategy, by default
         _configure_requests() with default values of n=5, backoff_f=0.1,
         force_on=[500, 502, 503, 504]
