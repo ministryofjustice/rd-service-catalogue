@@ -475,4 +475,3 @@ def get_readme_content(
             f"HTTP error {resp.status_code}: {resp.reason}")
     # TODO: _handle_response_exception()
     return readme
-    
