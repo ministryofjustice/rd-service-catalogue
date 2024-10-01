@@ -13,7 +13,6 @@ listing:
     filter-ui: true
     categories: false
     date-format: medium
-    max-items: 50
     table-hover: true
     image-placeholder: /./_static/Moj_logo_uk.png
     fields: [image, title, date-updated, description, organisation, categories]
