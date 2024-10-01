@@ -19,6 +19,8 @@ website:
     style: floating
     title: "AI Nexus Homepage"
     left:
+      - text: DMET team
+        href: /./index.qmd#category=dmet-python-packages
       - icon: rss
         href: index.xml
 format:

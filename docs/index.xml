@@ -10,13 +10,13 @@
 <atom:link href="https://ministryofjustice.github.io/rd-service-catalogue/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Tue, 01 Oct 2024 12:20:27 GMT</lastBuildDate>
+<lastBuildDate>Tue, 01 Oct 2024 13:12:47 GMT</lastBuildDate>
 <item>
   <title>zf-test-case-behat-extension</title>
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>Integration testing for ZF MVC applications in Behat by exposing ZendTest classes (originally built for PHPUnit)</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -24,7 +24,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>Connect to your zendesk API using sinatra</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -32,7 +32,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>Purge sensitive data from Zendesk tickets.</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -40,7 +40,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>A small Django app for aggregating a team&#39;s Zendesk scores</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -48,7 +48,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>This is a test repository</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -66,7 +66,7 @@
   <category>excel-export</category>
   <category>cran</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -74,7 +74,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>Info for the MoJ Cross-Government CTF Competition</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -82,7 +82,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>prototype ruby/rack based auth service</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -91,7 +91,7 @@
   <description>How to write functions in R</description>
   <category>training</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -103,7 +103,7 @@
   <category>themes</category>
   <category>moj</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -113,7 +113,7 @@
   <category>wp</category>
   <category>moj</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -121,7 +121,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>This is prototype for a Tactical Products wide user feedback tool</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -131,7 +131,7 @@
   <category>wp</category>
   <category>moj</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -139,7 +139,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>None</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -149,7 +149,7 @@
   <category>wp</category>
   <category>moj</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -160,7 +160,7 @@
   <category>moj</category>
   <category>jotw</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -168,7 +168,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>This utility provides a collection of bash scripts that can be used for a variety of tasks such as; applying software updates to website dependencies located in a bedrock structured website. It also contains helper commands to assist in local development.</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -178,7 +178,7 @@
   <category>wp</category>
   <category>moj</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -186,7 +186,7 @@
   <link>https://ministryofjustice.github.io/rd-service-catalogue/</link>
   <description>The WordPress Plugin to Store Uploads on Amazon S3</description>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 <item>
@@ -198,7 +198,7 @@
   <category>intranet</category>
   <category>moj</category>
   <guid>https://ministryofjustice.github.io/rd-service-catalogue/</guid>
-  <pubDate>Tue, 01 Oct 2024 12:20:27 GMT</pubDate>
+  <pubDate>Tue, 01 Oct 2024 13:12:47 GMT</pubDate>
   <media:content url="https://ministryofjustice.github.io/rd-service-catalogue/./www/Moj_logo_uk.png" medium="image" type="image/png" height="112" width="144"/>
 </item>
 </channel>
