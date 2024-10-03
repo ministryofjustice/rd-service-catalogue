@@ -5,7 +5,7 @@ from typing import Union
 from bs4 import BeautifulSoup
 from requests import HTTPError
 
-from ai_nexus.github_api import _configure_requests
+from ai_nexus.request_utils import _configure_requests
 
 
 class ConfluenceClient():
