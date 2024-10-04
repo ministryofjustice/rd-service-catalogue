@@ -136,3 +136,61 @@ class TestConfluenceClient:
             match="More than one code block was found on this page."):
             client.find_code_metadata(url)
         unstub()
+    
+
+    def test_return_page_text(self, mock_creds):
+        """Test return_page_text method with mocked response."""
+
+
+        def mock_response(url):
+            """Return a mock response object with code block element."""
+            class MockResponse:
+                bad_url = "https://example.com/doesnotexist"
+                good_url = "https://example.com/blog"
+                @property
+                def text(self, url1=bad_url, url2=good_url):
+                    if url == url1:
+                        return None
+                    elif url == url2:
+                        return "<p>Some content.</p>"
+
+                @property
+                def status_code(self, url1=bad_url, url2=good_url):
+                    if url == url1:
+                        return 404
+                    elif url == url2:
+                        return 200
+                    
+                @property
+                def ok(self, url1=bad_url, url2=good_url):
+                    if url == url1:
+                        return False
+                    elif url == url2:
+                        return True
+                
+                def raise_for_status(self):
+                    """Simulate raising an HTTPError for bad responses."""
+                    if self.status_code != 200:
+                        raise ValueError(f"HTTP Error: {self.status_code}")
+
+            return MockResponse()
+
+
+        # set up
+        client = ConfluenceClient(
+            atlassian_email=mock_creds["MOCK_EMAIL"],
+            atlassian_pat=mock_creds["MOCK_PAT"],
+            user_agent=mock_creds["MOCK_AGENT"],
+        )
+
+        # Case where url exists, stub values ------------------------------
+        url = "https://example.com/blog"
+        when(client._session).get(url).thenReturn(mock_response(url)) 
+        client.response = mock_response(url)
+        assert client.return_page_text(url) == "<p>Some content.</p>"
+        unstub()
+        # case where url doesn't exist ------------------------------------
+        url = "https://example.com/doesnotexist"
+        when(client._session).get(url).thenReturn(mock_response(url))
+        with pytest.raises(ValueError, match="HTTP Error: 404"):
+            client.return_page_text(url)
