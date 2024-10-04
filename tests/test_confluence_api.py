@@ -40,3 +40,21 @@ class TestConfluenceClient:
         assert client._session.auth == (
             mock_creds["MOCK_EMAIL"], mock_creds["MOCK_PAT"]
             )
+    
+
+    def test_confluence_client__url_defence(self, mock_creds):
+        """Test defensive utility raises as expected."""
+        client = ConfluenceClient(
+            mock_creds["MOCK_EMAIL"],
+            mock_creds["MOCK_PAT"],
+            mock_creds["MOCK_AGENT"],
+            )
+        with pytest.raises(TypeError, match=".* found <class 'int'>"):
+            client._url_defence(url=1)
+        with pytest.raises(TypeError, match=".* found <class 'float'>"):
+            client._url_defence(url=1.0)
+        with pytest.raises(TypeError, match=".* found <class 'bool'>"):
+            client._url_defence(url=False)
+        with pytest.raises(TypeError, match=".* found <class 'NoneType'>"):
+            client._url_defence(url=None)
+            
