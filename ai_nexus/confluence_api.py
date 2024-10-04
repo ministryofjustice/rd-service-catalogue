@@ -1,9 +1,8 @@
 """Integrating with Atlassian confluence api."""
 import json
-from typing import Union
 
 from bs4 import BeautifulSoup
-from requests import HTTPError
+from requests import HTTPError, Response
 
 from ai_nexus.request_utils import _configure_requests
 
@@ -52,7 +51,7 @@ class ConfluenceClient():
         if not isinstance(url, str):
             raise TypeError(f"`url` requires a string, found {type(url)}")
         elif not url.startswith(r"https://"):
-            raise ValueError("`url` should start with `https://`")
+            raise ValueError("`url` should start with 'https://'")
         else:
             pass
 
@@ -69,7 +68,7 @@ class ConfluenceClient():
         return _session
 
 
-    def _get_atlassian_page_content(self, url:str) -> None:
+    def _get_atlassian_page_content(self, url:str) -> Response:
         """Get the content of a specified Confluence page.
 
         Updates the `response` attribute.
@@ -81,7 +80,8 @@ class ConfluenceClient():
 
         Returns
         -------
-        None
+        The response from the Confluence API, also updates the instance's
+        state.
 
         Raises
         ------
@@ -95,6 +95,7 @@ class ConfluenceClient():
         resp = self._session.get(url)
         if resp.ok:
             self.response = resp
+            return resp
         else:
             raise HTTPError(resp.raise_for_status())
         
@@ -126,7 +127,7 @@ class ConfluenceClient():
             If more than one code block is found on the page.
         """
         self._url_defence(url)
-        self._get_atlassian_page_content(url)
+        self._get_atlassian_page_content(url) # updates self.response
         soup = BeautifulSoup(self.response.content, "html.parser")
         # there must be a single code element, cannot set or target an ID
         code_elements = soup.find_all("code")
@@ -154,5 +155,5 @@ class ConfluenceClient():
             HTML text content.
         """
         self._url_defence(url)
-        self._get_atlassian_page_content(url)
+        self._get_atlassian_page_content(url) # updates self.response
         return self.response.text
