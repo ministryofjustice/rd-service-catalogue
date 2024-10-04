@@ -1,4 +1,5 @@
 """Testing integration with Confluence API."""
+from mockito import when, unstub
 import pytest
 from requests import Session
 from requests.adapters import HTTPAdapter, Retry
@@ -73,3 +74,39 @@ class TestConfluenceClient:
         assert client._session.adapters[
             "https://"
             ].total == new_sess.adapters["https://"].total
+    
+
+    def test_find_code_metadata(self, mock_creds):
+        """Test find_code_metadata method with mocked response."""
+
+
+        def mock_response_with_single_code_block():
+            """Return a mock response object with code block element."""
+            class MockResponse:
+                @property
+                def content(self):
+                    return b'<code>{"title": "awesome project"}</code>'
+            return MockResponse()
+
+        # set up
+        client = ConfluenceClient(
+            atlassian_email=mock_creds["MOCK_EMAIL"],
+            atlassian_pat=mock_creds["MOCK_PAT"],
+            user_agent=mock_creds["MOCK_AGENT"],
+        )
+        mock_response = mock_response_with_single_code_block()
+        
+        # Mock the _get_atlassian_page_content method
+        when(client)._get_atlassian_page_content(
+            ...
+            ).thenReturn(mock_response)        
+        # The mocked method targets the response attribute, so update that
+        client.response = mock_response
+        # Use and assert
+        url = "https://some_confluence_page"
+        metadata = client.find_code_metadata(url)
+        # Assert the expected metadata
+        assert isinstance(metadata, dict)
+        expected_metadata = {"title": "awesome project"}
+        assert metadata == expected_metadata
+        unstub()
