@@ -90,8 +90,12 @@ class TestConfluenceClient:
                     elif url == "https://example.com/single_code_block":
                         return b'<code>{"title": "awesome project"}</code>'
                     elif url == "https://example.com/multiple_code_blocks":
-                        return b'<code>{"title": "first project"}</code><code>{"title": "second project"}</code>'
+                        return (
+                            b'<code>{"title": "first project"}</code>' +
+                            b'<code>{"title": "second project"}</code>'
+                            )
             return MockResponse()
+
 
         # set up
         client = ConfluenceClient(
@@ -121,3 +125,14 @@ class TestConfluenceClient:
             ValueError, match="No code elements were found on this page."
             ):
             client.find_code_metadata(url)
+        unstub()
+        # multiple code blocks has not been implemented -------------------
+        url = "https://example.com/multiple_code_blocks"
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            mock_response)
+        client.response = mock_response(url)
+        with pytest.raises(
+            NotImplementedError,
+            match="More than one code block was found on this page."):
+            client.find_code_metadata(url)
+        unstub()
