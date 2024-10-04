@@ -131,7 +131,8 @@ class ConfluenceClient():
         soup = BeautifulSoup(self.response.content, "html.parser")
         # there must be a single code element, cannot set or target an ID
         code_elements = soup.find_all("code")
-        if n := len(code_elements) == 0:
+        n = len(code_elements)
+        if n == 0:
             raise ValueError("No code elements were found on this page.")
         elif n > 1:
             raise NotImplementedError(
