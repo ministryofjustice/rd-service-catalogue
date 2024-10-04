@@ -2,7 +2,7 @@
 from mockito import when, unstub
 import pytest
 from requests import Session
-from requests.adapters import HTTPAdapter, Retry
+from requests.adapters import Retry
 
 from ai_nexus.confluence_api import ConfluenceClient
 
