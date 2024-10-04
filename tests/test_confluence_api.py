@@ -80,12 +80,17 @@ class TestConfluenceClient:
         """Test find_code_metadata method with mocked response."""
 
 
-        def mock_response_with_single_code_block():
+        def mock_response(url):
             """Return a mock response object with code block element."""
             class MockResponse:
                 @property
                 def content(self):
-                    return b'<code>{"title": "awesome project"}</code>'
+                    if url == "https://example.com/no_code_block":
+                        return b'<div>No code block here</div>'
+                    elif url == "https://example.com/single_code_block":
+                        return b'<code>{"title": "awesome project"}</code>'
+                    elif url == "https://example.com/multiple_code_blocks":
+                        return b'<code>{"title": "first project"}</code><code>{"title": "second project"}</code>'
             return MockResponse()
 
         # set up
@@ -94,19 +99,25 @@ class TestConfluenceClient:
             atlassian_pat=mock_creds["MOCK_PAT"],
             user_agent=mock_creds["MOCK_AGENT"],
         )
-        mock_response = mock_response_with_single_code_block()
-        
+        # single code block should pass -----------------------------------
         # Mock the _get_atlassian_page_content method
-        when(client)._get_atlassian_page_content(
-            ...
-            ).thenReturn(mock_response)        
-        # The mocked method targets the response attribute, so update that
-        client.response = mock_response
+        url = "https://example.com/single_code_block" 
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            mock_response)        
+        client.response = mock_response(url)
         # Use and assert
-        url = "https://some_confluence_page"
         metadata = client.find_code_metadata(url)
         # Assert the expected metadata
         assert isinstance(metadata, dict)
         expected_metadata = {"title": "awesome project"}
         assert metadata == expected_metadata
         unstub()
+        # no code block must raise ----------------------------------------
+        url = "https://example.com/no_code_block"
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            mock_response)
+        client.response = mock_response(url)
+        with pytest.raises(
+            ValueError, match="No code elements were found on this page."
+            ):
+            client.find_code_metadata(url)
