@@ -1,3 +1,5 @@
+"""Utilities common across generic requests sessions."""
+
 from typing import List
 
 import requests

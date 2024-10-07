@@ -1,7 +1,7 @@
 import dotenv
 from pyprojroot import here
 
-from ai_nexus.build_yaml import build_listings_from_parquet
+from ai_nexus_backend.build_yaml import build_listings_from_parquet
 
 # configure secrets -------------------------------------------------------
 

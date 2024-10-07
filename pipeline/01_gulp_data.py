@@ -1,7 +1,10 @@
 import dotenv
 from pyprojroot import here
 
-from ai_nexus.github_api import get_org_repos, get_all_org_repo_metadata
+from ai_nexus_backend.github_api import (
+    get_org_repos,
+    get_all_org_repo_metadata,
+)
 
 
 # configure secrets -------------------------------------------------------

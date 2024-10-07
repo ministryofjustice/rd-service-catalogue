@@ -7,7 +7,7 @@ from mockito import when, unstub
 import requests
 import pytest
 
-from ai_nexus import github_api
+from ai_nexus_backend import github_api
 
 
 class Test_AssembleReadmeEndpointFromRepoUrl:

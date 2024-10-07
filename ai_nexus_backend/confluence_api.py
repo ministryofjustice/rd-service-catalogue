@@ -5,7 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from requests import HTTPError, Response
 
-from ai_nexus.request_utils import _configure_requests
+from ai_nexus_backend.requests_utils import _configure_requests
 
 
 class ConfluenceClient:

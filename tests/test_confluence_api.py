@@ -5,7 +5,7 @@ import pytest
 from requests import Session
 from requests.adapters import Retry
 
-from ai_nexus.confluence_api import ConfluenceClient
+from ai_nexus_backend.confluence_api import ConfluenceClient
 
 
 class TestConfluenceClient:
