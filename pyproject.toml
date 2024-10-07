@@ -25,6 +25,7 @@ classifiers = [
     "Operating System :: MacOS",
 ]
 dependencies = [
+    "beautifulsoup4==4.12.3",
     "fastparquet==2024.5.0",
     "pandas==2.2.3",
     "pyarrow==17.0.0",
@@ -36,6 +37,7 @@ dependencies = [
 [project.optional-dependencies]
 # Add your optional dependencies here
 dev = [
+    "pytest==8.3.3",
     "hatchling==1.25.0",
     "mockito==1.5.1",
     "pre-commit==4.0.0",
