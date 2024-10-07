@@ -1,8 +1,10 @@
+from typing import List
+
 import requests
 
 
 def _configure_requests(
-    n=5, backoff_f=0.1, force_on=[500, 502, 503, 504]
+    n:int=5, backoff_f:float=0.1, force_on:List[int]=[500, 502, 503, 504]
 ) -> requests.Session:
     """Set up a request session with retry.
 
@@ -12,7 +14,7 @@ def _configure_requests(
         Number of retries, by default 5
     backoff_f : float, optional
         backoff_factor, by default 0.1
-    force_on : list, optional
+    force_on : List[int], optional
         HTTP status errors to retry, by default [500,502,503,504]
 
     Returns
