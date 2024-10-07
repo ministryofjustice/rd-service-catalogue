@@ -401,6 +401,18 @@ def combine_repo_tables(
     return output_table
 
 
+def _assemble_readme_endpoint_from_repo_url(repo_url:str):
+    """Match owner & repo names from GitHub url. Return readme endpoint.
+    
+    Created to help testing regex pattern.
+    """
+    # see https://regex101.com/r/KrKdEj/1 for test cases...
+    cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
+    owner = cap_groups.group(1)
+    repo_nm = cap_groups.group(2)  
+    return f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
+
+
 def get_readme_content(
         repo_url:str,
         pat:str,
@@ -453,11 +465,7 @@ def get_readme_content(
             f"repo_url should begin with 'https://', found {repo_url[0:7]}"
             )
     params = {"accept": accept}
-    # see https://regex101.com/r/KrKdEj/1 for test cases...
-    cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
-    owner = cap_groups.group(1)
-    repo_nm = cap_groups.group(2)  
-    endpoint = f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
+    endpoint=_assemble_readme_endpoint_from_repo_url(repo_url)
     resp = requests.get(
         endpoint,
         params=params,
