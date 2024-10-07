@@ -23,6 +23,7 @@ jobs:
         key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
     - run: |
         pre-commit install
+        pre-commit autoupdate --repo https://github.com/pre-commit/pre-commit-hooks
         pre-commit run --show-diff-on-failure --color=always --all-files
 
     - name: Run tests
