@@ -45,10 +45,14 @@ AGENT = "<INSERT A SUITABLE USER AGENT>"
 PAT = "<INSERT A GITHUB PAT WITH READ REPO METADATA SCOPES>"
 ORG_NM1 = "<INSERT AN ORGANISATION NAME>"
 ORG_NM2 = "<INSERT AN ORGANISATION NAME>"
+ATLASSIAN_PAT = "<INSERT YOUR PAT>"
+ATLASSIAN_EMAIL = "<INSERT YOUR ATLASSIAN ACCOUNT EMAIL>
 
 ```
 
 Note: The order of `ORG_NM1` / `ORG_NM2` shouldn't matter.
+To create an Atlassian Personal Access Token, visit
+[Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
 
 ### To build the site:
 
