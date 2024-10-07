@@ -1,4 +1,5 @@
 """Query GitHub api."""
+
 from base64 import b64decode
 import re
 
@@ -7,6 +8,7 @@ import requests
 from requests.exceptions import HTTPError
 
 from ai_nexus.requests_utils import _configure_requests
+
 
 def _paginated_get(
     url: str,
@@ -51,8 +53,9 @@ def _paginated_get(
         r = sess.get(
             url,
             headers={
-                "Authorization": f"Bearer {pat}", "User-Agent": agent
-                },
+                "Authorization": f"Bearer {pat}",
+                "User-Agent": agent,
+            },
             params=params,
         )
         if r.ok:
@@ -68,7 +71,8 @@ def _paginated_get(
                 break
         elif r.status_code == 401:
             raise PermissionError(
-                "PAT is invalid. Try generating a new PAT.")
+                "PAT is invalid. Try generating a new PAT."
+            )
         else:
             print(f"Unable to get repo issues, code: {r.status_code}")
     return responses
@@ -140,7 +144,6 @@ def get_org_repos(
                     "programming_language": [j["language"]],
                     "updated_at": [j["updated_at"]],
                     "org_nm": org_nm,
-                
                 }
             )
             # set dtypes
@@ -153,17 +156,17 @@ def get_org_repos(
 
 
 def get_all_org_repo_metadata(
-        metadata: str,
-        repo_nms: list,
-        org_nm: str,
-        pat: str,
-        agent: str,
-        sess: requests.Session = _configure_requests(),
-        ) -> pd.DataFrame:
+    metadata: str,
+    repo_nms: list,
+    org_nm: str,
+    pat: str,
+    agent: str,
+    sess: requests.Session = _configure_requests(),
+) -> pd.DataFrame:
     """Get every repo metadata item for entire org.
 
     Currently only supports metadata values "custom_properties" or
-    "topics". 
+    "topics".
 
     Parameters
     ----------
@@ -200,24 +203,27 @@ def get_all_org_repo_metadata(
         url_slug = m
     else:
         raise NotImplementedError(
-            "Only metadata 'custom_properties' and 'topics' are supported")
-    
+            "Only metadata 'custom_properties' and 'topics' are supported"
+        )
+
     all_meta = pd.DataFrame()
     n_repos = len(repo_nms)
     for i, repo_nm in enumerate(repo_nms):
-        print(
-            f"Get {m} for {repo_nm}, {i+1}/{n_repos} done.")
+        print(f"Get {m} for {repo_nm}, {i+1}/{n_repos} done.")
         repo_url = f"https://api.github.com/repos/{org_nm}/{repo_nm}"
         query_url = f"{repo_url}/{url_slug}"
         PARAMS = {"accept": "application/vnd.github+json"}
         repo_meta = sess.get(
             query_url,
             headers={
-                "Authorization": f"Bearer {pat}", "User-Agent": agent},
-                params=PARAMS,
-            )
+                "Authorization": f"Bearer {pat}",
+                "User-Agent": agent,
+            },
+            params=PARAMS,
+        )
         current_row = pd.DataFrame(
-            {"repo_url": repo_url, m: [repo_meta.json()]})
+            {"repo_url": repo_url, m: [repo_meta.json()]}
+        )
         # TODO: conditional handling of topics vs custom properties
         all_meta = pd.concat([all_meta, current_row])
 
@@ -271,7 +277,8 @@ def get_all_org_issues(
         endpoint = "pulls"
     else:
         raise ValueError(
-            "`issue_type` must be either 'issues' or 'pulls'.")
+            "`issue_type` must be either 'issues' or 'pulls'."
+        )
 
     base_url = f"https://api.github.com/repos/{org_nm}/"
     all_issues = list()
@@ -315,7 +322,7 @@ def get_all_org_issues(
                     assignees_users = [usr["login"] for usr in assignees]
                     assignees_avatar = [
                         usr["avatar_url"] for usr in assignees
-                        ]
+                    ]
                 # collect issue details
                 if endpoint == "issues":
                     repo_url = i["repository_url"]
@@ -345,7 +352,8 @@ def get_all_org_issues(
                     issue_row[col] = issue_row[col].astype(dtype)
 
                 repo_issues_concat = pd.concat(
-                    [repo_issues_concat, issue_row])
+                    [repo_issues_concat, issue_row]
+                )
 
     repo_issues_concat.sort_values(by="created_at", inplace=True)
 
@@ -384,14 +392,13 @@ def combine_repo_tables(
     # repo_url. pattern is repo_url/pulls/pull_no
     pulls["repo_url"] = [
         i.split("pulls")[0][:-1] for i in pulls["repo_url"]
-        ]
+    ]
     pulls["type"] = "pr"
     # filter down the issues table, which contains pulls too, and no
     # obvious identifier
     issues_pulls = iss.merge(
-        pulls, how="left", on="node_id", indicator=True)[
-        "_merge"
-    ]
+        pulls, how="left", on="node_id", indicator=True
+    )["_merge"]
     iss = issues_table.loc[issues_pulls == "left_only"]
     iss["type"] = "issue"
     # combine issues & pulls
@@ -401,24 +408,24 @@ def combine_repo_tables(
     return output_table
 
 
-def _assemble_readme_endpoint_from_repo_url(repo_url:str):
+def _assemble_readme_endpoint_from_repo_url(repo_url: str):
     """Match owner & repo names from GitHub url. Return readme endpoint.
-    
+
     Created to help testing regex pattern.
     """
     # see https://regex101.com/r/KrKdEj/1 for test cases...
     cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
     owner = cap_groups.group(1)
-    repo_nm = cap_groups.group(2)  
+    repo_nm = cap_groups.group(2)
     return f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
 
 
 def get_readme_content(
-        repo_url:str,
-        pat:str,
-        agent:str,
-        accept:str="application/vnd.github+json",
-        ):
+    repo_url: str,
+    pat: str,
+    agent: str,
+    accept: str = "application/vnd.github+json",
+):
     """Fetches the README content from a single GitHub repository.
 
     Parameters
@@ -447,39 +454,46 @@ def get_readme_content(
         "application/vnd.github+json" or "application/vnd.github.html+json"
         or if the `repo_url` does not start with "https://".
     requests.exceptions.HTTPError
-        If the HTTP request to the GitHub API fails.    
+        If the HTTP request to the GitHub API fails.
     """
     # defence
     str_params = {
-        "repo_url": repo_url, "pat": pat, "agent": agent, "accept": accept}
+        "repo_url": repo_url,
+        "pat": pat,
+        "agent": agent,
+        "accept": accept,
+    }
     for k, v in str_params.items():
         if not isinstance(v, str):
-            raise TypeError(f"{k} expected type str. Found {type(v)}.")     
+            raise TypeError(f"{k} expected type str. Found {type(v)}.")
     accept_vals = [
-        "application/vnd.github+json", "application/vnd.github.html+json"]
+        "application/vnd.github+json",
+        "application/vnd.github.html+json",
+    ]
     if accept not in accept_vals:
         raise ValueError(
-            f"accept expects either {' or '.join(accept_vals)}")
+            f"accept expects either {' or '.join(accept_vals)}"
+        )
     if not repo_url.startswith("https://"):
         raise ValueError(
             f"repo_url should begin with 'https://', found {repo_url[0:7]}"
-            )
+        )
     params = {"accept": accept}
-    endpoint=_assemble_readme_endpoint_from_repo_url(repo_url)
+    endpoint = _assemble_readme_endpoint_from_repo_url(repo_url)
     resp = requests.get(
         endpoint,
         params=params,
         headers={"Authorization": f"Bearer {pat}", "User-Agent": agent},
-        )
+    )
     if resp.ok:
         content = resp.json()
         # decode from base64
-        if "content" in content.keys() and content.get(
-            "encoding") == "base64":
-            readme = b64decode(
-                content.get("content")).decode("utf-8")
+        if (
+            "content" in content.keys()
+            and content.get("encoding") == "base64"
+        ):
+            readme = b64decode(content.get("content")).decode("utf-8")
     else:
-        raise HTTPError(
-            f"HTTP error {resp.status_code}: {resp.reason}")
+        raise HTTPError(f"HTTP error {resp.status_code}: {resp.reason}")
     # TODO: _handle_response_exception()
     return readme

@@ -1,5 +1,4 @@
 import dotenv
-import pandas as pd
 from pyprojroot import here
 
 from ai_nexus.build_yaml import build_listings_from_parquet
@@ -17,5 +16,5 @@ for nm in [org_nm1, org_nm2]:
     build_listings_from_parquet(
         prq_pth=here(in_pth),
         template_pth=here("template.txt"),
-        yaml_out_pth=here(out_pth)
-        )
+        yaml_out_pth=here(out_pth),
+    )

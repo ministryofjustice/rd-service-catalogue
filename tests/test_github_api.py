@@ -1,4 +1,6 @@
 """Testing integration with github API."""
+
+# flake8: noqa E501
 import re
 
 from mockito import when, unstub
@@ -6,6 +8,7 @@ import requests
 import pytest
 
 from ai_nexus import github_api
+
 
 class Test_AssembleReadmeEndpointFromRepoUrl:
     """Regex pattern testing for internal utility."""
@@ -52,53 +55,60 @@ class Test_AssembleReadmeEndpointFromRepoUrl:
         "https://api.github.com/repos/ministryofjustice/cla-can-you-get-legal-aid/readme",
         "https://api.github.com/repos/ministryofjustice/calendars/readme",
     ]
+
     @pytest.mark.parametrize(
-            "repo_url, endpoint_url", zip(_test_cases, _expected_endpoints)
-            )
+        "repo_url, endpoint_url", zip(_test_cases, _expected_endpoints)
+    )
     def test__assemble_readme_endpoint_from_repo_url_returns_expected_str(
-            self, repo_url, endpoint_url
+        self, repo_url, endpoint_url
     ):
         """Loop through every repo url, check func returns exp endpoint."""
-        assert github_api._assemble_readme_endpoint_from_repo_url(
-            repo_url
-            ) == endpoint_url
-        
+        assert (
+            github_api._assemble_readme_endpoint_from_repo_url(repo_url)
+            == endpoint_url
+        )
+
 
 class TestGetReadmeContent(object):
     """Tests for get_readme_content()."""
-
 
     def test_get_readme_content_defence(self):
         """Check defensive logic."""
         with pytest.raises(
             TypeError,
-            match="repo_url expected type str. Found <class 'int'>."):
+            match="repo_url expected type str. Found <class 'int'>.",
+        ):
             github_api.get_readme_content(
                 repo_url=1, pat="foo", agent="bar"
-                )
+            )
         with pytest.raises(
             ValueError,
             match=re.escape(
-                "accept expects either application/vnd.github+json or app")
-            ):
+                "accept expects either application/vnd.github+json or app"
+            ),
+        ):
             github_api.get_readme_content(
-                repo_url="foobar", pat="foo", agent="bar", accept="wrong",
-                       )
+                repo_url="foobar",
+                pat="foo",
+                agent="bar",
+                accept="wrong",
+            )
         with pytest.raises(
             ValueError,
-            match="repo_url should begin with 'https://', found http://"
-            ):
+            match="repo_url should begin with 'https://', found http://",
+        ):
             github_api.get_readme_content(
-                repo_url="http://NOT_SUPPORTED", pat="foo", agent="bar",
+                repo_url="http://NOT_SUPPORTED",
+                pat="foo",
+                agent="bar",
             )
-
 
     def test_get_readme_content(self):
         """Mocked test ensuring byte code returned as expected string."""
         # Mock the response of the get_readme_content function
         mock_response = requests.Response()
         mock_response.status_code = 200
-        _b1 =  b'{"content": "VGhpcyBpcyB0aGUgUkVBRE1FIGNvbnRlbnQ=",'
+        _b1 = b'{"content": "VGhpcyBpcyB0aGUgUkVBRE1FIGNvbnRlbnQ=",'
         _b2 = b' "encoding": "base64"}'
         _bytes = _b1 + _b2
         mock_response._content = _bytes
@@ -108,7 +118,8 @@ class TestGetReadmeContent(object):
         when(requests).get(...).thenReturn(mock_response)
         # Call & assert
         result = github_api.get_readme_content(
-            "https://github.com/owner/repo", "fake_pat", "fake_agent")
+            "https://github.com/owner/repo", "fake_pat", "fake_agent"
+        )
         assert result == "This is the README content"
         unstub()
 
@@ -118,6 +129,6 @@ class TestGetReadmeContent(object):
             "https://github.com/owner/repo",
             "fake_pat",
             "fake_agent",
-            accept="application/vnd.github.html+json"
+            accept="application/vnd.github.html+json",
         )
         unstub()

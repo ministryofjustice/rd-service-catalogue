@@ -1,17 +1,17 @@
-import pathlib 
+import pathlib
 
 import pandas as pd
 
 
 def build_listings_from_parquet(
-        prq_pth:pathlib.Path,
-        template_pth: pathlib.Path,
-        yaml_out_pth: pathlib.Path
-        ) -> None:
+    prq_pth: pathlib.Path,
+    template_pth: pathlib.Path,
+    yaml_out_pth: pathlib.Path,
+) -> None:
     """Create the yaml file required to build quarto listings.
 
     Requires a parquet file of repo metadata and a template.txt, containing
-    the required yaml fields. 
+    the required yaml fields.
 
     Parameters
     ----------
@@ -45,8 +45,8 @@ def build_listings_from_parquet(
                 REPO_URL=r["html_url"],
                 ORG_NM=r["org_nm"],
                 TOPIC_LIST=[
-                    item for sublist in r["topics"].values() for item in sublist.tolist() # TODO - tidy this
-                    ],
+                    i for _li in r["topics"].values() for i in _li.tolist()
+                ],
             )
             f.write(yaml_entry)
         f.close()
