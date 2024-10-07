@@ -1,5 +1,7 @@
 """Utilities common across generic requests sessions."""
+
 import requests
+
 
 def _configure_requests(
     n=5, backoff_f=0.1, force_on=[500, 502, 503, 504]

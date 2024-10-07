@@ -1,4 +1,5 @@
 """Integrating with Atlassian confluence api."""
+
 import json
 
 from bs4 import BeautifulSoup
@@ -7,7 +8,7 @@ from requests import HTTPError, Response
 from ai_nexus.request_utils import _configure_requests
 
 
-class ConfluenceClient():
+class ConfluenceClient:
     """A client for interacting with the Atlassian Confluence API.
 
     This class provides methods to retrieve and parse content from
@@ -38,15 +39,14 @@ class ConfluenceClient():
     return_page_text(url:str) -> str
         Returns the web page text for the provided url.
     """
-    
+
     def __init__(self, atlassian_email, atlassian_pat, user_agent=None):
         self.__email = atlassian_email
         self.__pat = atlassian_pat
         self.__agent = user_agent
         self._session = self._configure_atlassian()
-    
 
-    def _url_defence(self, url:str) -> None:
+    def _url_defence(self, url: str) -> None:
         """Internal utility for defence checking urls."""
         if not isinstance(url, str):
             raise TypeError(f"`url` requires a string, found {type(url)}")
@@ -55,20 +55,18 @@ class ConfluenceClient():
         else:
             pass
 
-
     def _configure_atlassian(self, _session=_configure_requests()):
         """Set up a request Session with retry & backoff spec."""
         _session.auth = (self.__email, self.__pat)
         if self.__agent:
             # 'python-requests/version by default'
-            _session.headers["User-Agent"] = self.__agent 
+            _session.headers["User-Agent"] = self.__agent
         _session.headers["Accept"] = "application/json"
         _session.headers["Content-Type"] = "application/json"
         self._session = _session
         return _session
 
-
-    def _get_atlassian_page_content(self, url:str) -> Response:
+    def _get_atlassian_page_content(self, url: str) -> Response:
         """Get the content of a specified Confluence page.
 
         Updates the `response` attribute.
@@ -98,9 +96,8 @@ class ConfluenceClient():
             return resp
         else:
             raise HTTPError(resp.raise_for_status())
-        
 
-    def find_code_metadata(self, url:str) -> dict:
+    def find_code_metadata(self, url: str) -> dict:
         """
         Extracts metadata from a code block in page content.
 
@@ -127,7 +124,7 @@ class ConfluenceClient():
             If more than one code block is found on the page.
         """
         self._url_defence(url)
-        self._get_atlassian_page_content(url) # updates self.response
+        self._get_atlassian_page_content(url)  # updates self.response
         soup = BeautifulSoup(self.response.content, "html.parser")
         # there must be a single code element, cannot set or target an ID
         code_elements = soup.find_all("code")
@@ -136,13 +133,13 @@ class ConfluenceClient():
             raise ValueError("No code elements were found on this page.")
         elif n > 1:
             raise NotImplementedError(
-                "More than one code block was found on this page.") 
+                "More than one code block was found on this page."
+            )
         meta = json.loads(code_elements[0].text)
         self.metadata = meta
         return meta
-    
 
-    def return_page_text(self, url:str) -> str:
+    def return_page_text(self, url: str) -> str:
         """Returns text from confluence page content.
 
         Parameters
@@ -156,5 +153,5 @@ class ConfluenceClient():
             HTML text content.
         """
         self._url_defence(url)
-        self._get_atlassian_page_content(url) # updates self.response
+        self._get_atlassian_page_content(url)  # updates self.response
         return self.response.text
