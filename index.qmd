@@ -24,7 +24,7 @@ listing:
 
 ## GitHub Projects
 
-Note that in this version, only public repositories are available. 
+Note that in this version, only public repositories are available.
 
 ::: {#main-listing}
 :::
