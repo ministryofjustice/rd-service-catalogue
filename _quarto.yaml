@@ -25,7 +25,7 @@ website:
         href: index.xml
 format:
   html:
-    theme: 
+    theme:
       light: cosmo
       dark: sandstone
     toc: false

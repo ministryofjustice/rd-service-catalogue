@@ -8,7 +8,7 @@ from ai_nexus.github_api import get_org_repos, get_all_org_repo_metadata
 
 secrets = dotenv.dotenv_values(".env")
 user_agent = secrets["AGENT"]
-pat = secrets["PAT"] # TODO: Implement OAuth
+pat = secrets["PAT"]  # TODO: Implement OAuth
 org_nm1 = secrets["ORG_NM1"]
 org_nm2 = secrets["ORG_NM2"]
 
@@ -24,7 +24,7 @@ for nm in [org_nm1, org_nm2]:
         org_nm=nm,
         pat=pat,
         agent=user_agent,
-        )
+    )
 
     topics = get_all_org_repo_metadata(
         metadata="topics",
@@ -32,7 +32,7 @@ for nm in [org_nm1, org_nm2]:
         org_nm=nm,
         pat=pat,
         agent=user_agent,
-        )
+    )
 
     # join tables ---------------------------------------------------------
     for tab in [repos, custom_props, topics]:

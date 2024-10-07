@@ -1,3 +1,8 @@
+<!--- Badges start --->
+<img src="https://github.com/ministryofjustice/rd-service-catalogue/actions/workflows/test_pkg.yml/badge.svg" alt="Test suite status"/>
+
+<!--- Badges end --->
+
 # AI Nexus
 
 ## A catalogue of products and services featuring GenAI capabilities.
@@ -10,6 +15,22 @@ Note that the app is currently configured to access public repo via a
 developer's GitHub Personal Access Token (PAT). If this changes to include
 private repos, then an alternative to GitHub Pages will need to be used for
 hosting the site.
+
+## Developer Guidance
+
+This project uses [pre-commit](https://pre-commit.com/) for automated
+linting. Pre-commit is installed with dev requirements in `pyproject.toml`.
+
+Once pre-commit is installed, remember to install the hooks with:
+
+`pre-commit install`
+
+This step installs the hooks specified within `.pre-commit-config.yaml`.
+
+Committing diff should now run the hooks against the files. To see hook
+feedback for all files (including unstaged), run:
+
+`pre-commit run --all-files`
 
 ### To configure your secrets:
 
