@@ -45,6 +45,7 @@ class TestGetReadmeContent(object):
         _b2 = b' "encoding": "base64"}'
         _bytes = _b1 + _b2
         mock_response._content = _bytes
+        
         # Mock the requests.get call inside get_readme_content. Needs to
         # match requests.get usage in the module.
         when(requests).get(...).thenReturn(mock_response)
@@ -53,6 +54,7 @@ class TestGetReadmeContent(object):
             "https://github.com/owner/repo", "fake_pat", "fake_agent")
         assert result == "This is the README content"
         unstub()
+
         # repeat for accept HTML
         when(requests).get(...).thenReturn(mock_response)
         result = github_api.get_readme_content(
