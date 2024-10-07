@@ -7,7 +7,7 @@ import pandas as pd
 import requests
 from requests.exceptions import HTTPError
 
-from ai_nexus.requests_utils import _configure_requests
+from ai_nexus_backend.requests_utils import _configure_requests
 
 
 def _paginated_get(
