@@ -63,6 +63,18 @@ feedback for all files (including unstaged), run:
 
 `pre-commit run --all-files`
 
+### Quick start setup
+
+Working on the app relies on Python dependencies being installed locally.
+First set up a virtualenv and install dependencies:
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -e '.[dev, ai_nexus_backend]'
+pre-commit install
+```
+
 ### To configure your secrets:
 
 This app requires you to set some environment variables as secrets. We use
