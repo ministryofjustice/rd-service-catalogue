@@ -1,13 +1,9 @@
 """
-Transform data for the service catalogue into a format that can be accepted
-by the Haystack/Opensearch indexing pipeline.
+Functions to help transform data for the service catalogue into a format that can
+be accepted by the Haystack/Opensearch indexing pipeline.
 
 TO UPDATE
- - Currently requires data to be stored alongside this script in a file called
-'ai_catalogue.json'. Eventually this should be connected to the database
-underpinning the main app.
  - The columns to search over are hard-coded
- - The code to run the functions in this script may need to be moved elsewhere
 """
 
 import json
@@ -101,15 +97,3 @@ def transform_data(project_list: list) -> list:
     ]
 
     return dataset
-
-
-if __name__ == '__main__':
-
-    # Read the project list from a json file
-    project_list = fetch_data('ai_catalogue.json')
-    # Get into the desired format
-    dataset = transform_data(project_list)
-
-    # Write to another json file
-    with open('search_backend_data.json', 'w') as f:
-        json.dump(dataset, f)
