@@ -16,7 +16,38 @@ developer's GitHub Personal Access Token (PAT). If this changes to include
 private repos, then an alternative to GitHub Pages will need to be used for
 hosting the site.
 
+## Installation
+
+To install `ai_nexus_backend`:
+
+Create a python virtual environment with your preferred method, ensuring
+the python version matches the following supported versions:
+
+- 3.9
+- 3.10
+- 3.11
+- 3.12
+
+For example, if using `conda`:
+
+`conda create -n <INSERT_ENV_NM> python=3.9 -y`
+
+Activate your env:
+
+`conda activate <INSERT_ENV_NM>`
+
+Once activated, install the package:
+
+`pip install .`
+
 ## Developer Guidance
+
+Install the package in editable mode with all necessary dependencies:
+
+`pip install -e ".[dev]"`
+
+Remember to add any additional required dependencies to the appropriate
+section of the `pyproject.toml`.
 
 This project uses [pre-commit](https://pre-commit.com/) for automated
 linting. Pre-commit is installed with dev requirements in `pyproject.toml`.
