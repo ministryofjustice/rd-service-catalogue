@@ -19,6 +19,7 @@ description = "Modular component for AI-enabled application search backend."
 readme = "README.md"
 authors = [
     { name="Rich Leyshon", email="richard.leyshon@digital.justice.gov.uk" },
+    { name="Chloe Pugh", email="chloe.pugh@digital.justice.gov.uk" },
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
