@@ -49,6 +49,11 @@ Install the package in editable mode with all necessary dependencies:
 Remember to add any additional required dependencies to the appropriate
 section of the `pyproject.toml`.
 
+When contributing to the package, please observe semantic versioning.
+Increment the package version in `pyproject.toml` and update the
+`CHANGELOG.md` with a high-level summary of what was added, changed,
+removed or fixed.
+
 This project uses [pre-commit](https://pre-commit.com/) for automated
 linting. Pre-commit is installed with dev requirements in `pyproject.toml`.
 
