@@ -1,0 +1,69 @@
+
+
+[
+    {
+        "project_name":"Proj 1",
+        "date_identified":"02\/10\/2024",
+        "date_last_updated":null,
+        "description":"Proof of concept...",
+        "business_area":"HQ",
+        "team":"Justice Digital",
+        "using_generative_ai_llm":"Yes",
+        "ai_functionality":"Generative AI",
+        "status":"Proof of concept",
+        "what_does_this_initiative_do":"A ...",
+        "reasons_for_use":null,
+        "problem_solved_by_the_initiative":"...",
+        "metrics_or_intended_impacts":null,
+        "lessons_learned":null,
+        "future_work":null,
+        "high_level_domain_estimate":null,
+        "who_are_the_users":"...",
+        "utilisation":null,
+        "business_lead":null,
+        "technical_lead":"Specified lead",
+        "github_url": "..."
+    },
+    {
+        "project_name":"Proj 2",
+        "date_identified":"09\/10\/2024",
+
+        "date_last_updated":null,
+
+        "description":"Proof of concept...",
+
+        "business_area":"HQ",
+
+        "team":"Justice Digital",
+
+        "using_generative_ai_llm":"Yes",
+
+        "ai_functionality":"Generative AI",
+
+        "status":"Proof of concept",
+
+        "what_does_this_initiative_do":"A ...",
+
+        "reasons_for_use":null,
+
+        "problem_solved_by_the_initiative":"...",
+
+        "metrics_or_intended_impacts":null,
+
+        "lessons_learned":null,
+
+        "future_work":null,
+
+        "high_level_domain_estimate":null,
+
+        "who_are_the_users":"...",
+
+        "utilisation":null,
+
+        "business_lead":null,
+
+        "technical_lead":"Specified leader",
+
+        "github_url": "..."
+    }
+]
