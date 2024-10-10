@@ -3,9 +3,9 @@
 
 <!--- Badges end --->
 
-# AI Nexus
+# `ai_nexus_backend`
 
-## A catalogue of products and services featuring GenAI capabilities.
+## ETL for a catalogue of products and services featuring GenAI capabilities.
 
 ### Data Privacy
 
