@@ -97,6 +97,22 @@ Note: The order of `ORG_NM1` / `ORG_NM2` shouldn't matter.
 To create an Atlassian Personal Access Token, visit
 [Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
 
+### A note on testing
+
+This package uses `pytest` to verify unit behaviour. This is set up to run
+on push and PR on all branches of the repository with GitHub Actions.
+
+Changes to the codebase will be tested on supported python versions
+(see above).
+
+To run the tests locally from the cli:
+
+`pytest`
+
+`pytest` can be invoked in many ways to target specific tests or groups of
+tests. For more, see
+[How to invoke pytest](https://docs.pytest.org/en/stable/how-to/usage.html).
+
 ### To build the site:
 
 1. Configure a virtual environment with python 3.12.
