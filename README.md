@@ -42,13 +42,16 @@ This app requires you to set some environment variables as secrets. We use
 
 ```
 AGENT = "<INSERT A SUITABLE USER AGENT>"
-PAT = "<INSERT A GITHUB PAT WITH READ REPO METADATA SCOPES>"
+GITHUB_PAT = "<INSERT A GITHUB PAT WITH READ REPO METADATA SCOPES>"
 ORG_NM1 = "<INSERT AN ORGANISATION NAME>"
 ORG_NM2 = "<INSERT AN ORGANISATION NAME>"
 ATLASSIAN_PAT = "<INSERT YOUR PAT>"
 ATLASSIAN_EMAIL = "<INSERT YOUR ATLASSIAN ACCOUNT EMAIL>
 
 ```
+
+Ensure you have configured your GITHUB_PAT with SSO for organisation access
+and have granted it with sufficient scopes.
 
 Note: The order of `ORG_NM1` / `ORG_NM2` shouldn't matter.
 To create an Atlassian Personal Access Token, visit
