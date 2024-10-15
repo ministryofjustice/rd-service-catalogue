@@ -2,6 +2,7 @@
 
 from base64 import b64decode
 import re
+import warnings
 
 import pandas as pd
 import requests
@@ -74,6 +75,11 @@ def _paginated_get(
             raise PermissionError(
                 "PAT is invalid. Try generating a new PAT."
             )
+        elif r.status_code == 403:
+            warnings.warn(
+                f"Skipping {url}: status {r.status_code}, {r.reason}"
+            )
+            continue
         else:
             print(f"Unable to get repo issues, code: {r.status_code}")
     return responses
