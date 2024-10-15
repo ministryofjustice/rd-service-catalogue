@@ -136,30 +136,6 @@ class TestGetReadmeContent(object):
         unstub()
 
 
-# MD_STR = """
-#     # Sample README
-
-#     Here is some content.
-
-#     ```yaml
-#     key1: value1
-#     key2: value2
-#     ```
-
-#     More content here.
-#     """
-# # yaml.safe_load(textwrap.dedent(MD_STR))
-# # github_api.extract_yaml_from_md(textwrap.dedent(MD_STR))
-
-# MD_STR = """
-#     # Sample README\nHere is some content.\n```yaml\nkey1: value1\nkey2: value2\n```\nMore content here.
-#     """
-
-# # yaml.safe_load(MD_STR)
-
-# github_api.extract_yaml_from_md(MD_STR)
-
-
 class TestExtractYamlFromMd:
     """Tests for extract_yaml_from_md()."""
 
