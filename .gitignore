@@ -2,7 +2,8 @@ listings
 .vscode
 catalogue-env
 .quarto
-data
+data/*
+!./tests/data/
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python

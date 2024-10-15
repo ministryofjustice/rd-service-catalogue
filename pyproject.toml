@@ -13,12 +13,13 @@ exclude = [
 packages = ["./ai_nexus_backend"]
 [project]
 name = "ai_nexus_backend"
-version = "0.0.1"
-requires-python = "==3.12.*"
+version = "0.1.0"
+requires-python = ">=3.9,<=3.13"
 description = "Modular component for AI-enabled application search backend."
 readme = "README.md"
 authors = [
     { name="Rich Leyshon", email="richard.leyshon@digital.justice.gov.uk" },
+    { name="Chloe Pugh", email="chloe.pugh@digital.justice.gov.uk" },
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

@@ -3,9 +3,9 @@
 
 <!--- Badges end --->
 
-# AI Nexus
+# `ai_nexus_backend`
 
-## A catalogue of products and services featuring GenAI capabilities.
+## ETL for a catalogue of products and services featuring GenAI capabilities.
 
 ### Data Privacy
 
@@ -16,7 +16,43 @@ developer's GitHub Personal Access Token (PAT). If this changes to include
 private repos, then an alternative to GitHub Pages will need to be used for
 hosting the site.
 
+## Installation
+
+To install `ai_nexus_backend`:
+
+Create a python virtual environment with your preferred method, ensuring
+the python version matches the following supported versions:
+
+- 3.9
+- 3.10
+- 3.11
+- 3.12
+
+For example, if using `conda`:
+
+`conda create -n <INSERT_ENV_NM> python=3.9 -y`
+
+Activate your env:
+
+`conda activate <INSERT_ENV_NM>`
+
+Once activated, install the package:
+
+`pip install .`
+
 ## Developer Guidance
+
+Install the package in editable mode with all necessary dependencies:
+
+`pip install -e ".[dev]"`
+
+Remember to add any additional required dependencies to the appropriate
+section of the `pyproject.toml`.
+
+When contributing to the package, please observe semantic versioning.
+Increment the package version in `pyproject.toml` and update the
+`CHANGELOG.md` with a high-level summary of what was added, changed,
+removed or fixed.
 
 This project uses [pre-commit](https://pre-commit.com/) for automated
 linting. Pre-commit is installed with dev requirements in `pyproject.toml`.
@@ -31,6 +67,18 @@ Committing diff should now run the hooks against the files. To see hook
 feedback for all files (including unstaged), run:
 
 `pre-commit run --all-files`
+
+### Quick start setup
+
+Working on the app relies on Python dependencies being installed locally.
+First set up a virtualenv and install dependencies:
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -e '.[dev, ai_nexus_backend]'
+pre-commit install
+```
 
 ### To configure your secrets:
 
@@ -56,6 +104,22 @@ and have granted it with sufficient scopes.
 Note: The order of `ORG_NM1` / `ORG_NM2` shouldn't matter.
 To create an Atlassian Personal Access Token, visit
 [Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
+
+### A note on testing
+
+This package uses `pytest` to verify unit behaviour. This is set up to run
+on push and PR on all branches of the repository with GitHub Actions.
+
+Changes to the codebase will be tested on supported python versions
+(see above).
+
+To run the tests locally from the cli:
+
+`pytest`
+
+`pytest` can be invoked in many ways to target specific tests or groups of
+tests. For more, see
+[How to invoke pytest](https://docs.pytest.org/en/stable/how-to/usage.html).
 
 ### To build the site:
 
