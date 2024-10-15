@@ -43,7 +43,6 @@ dev = [
     "hatchling==1.25.0",
     "mockito==1.5.1",
     "pre-commit==4.0.0",
-    "pytest==8.3.3",
 ]
 [project.urls]
 Repository = "https://github.com/ministryofjustice/..."
