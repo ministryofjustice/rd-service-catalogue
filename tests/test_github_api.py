@@ -2,10 +2,12 @@
 
 # flake8: noqa E501
 import re
+import textwrap
 
 from mockito import when, unstub
 import requests
 import pytest
+from yaml import YAMLError
 
 from ai_nexus_backend import github_api
 
@@ -132,3 +134,94 @@ class TestGetReadmeContent(object):
             accept="application/vnd.github.html+json",
         )
         unstub()
+
+
+class TestExtractYamlFromMd:
+    """Tests for extract_yaml_from_md()."""
+
+    def test_extract_valid_yaml(self):
+        """Test extraction of valid YAML from Markdown content."""
+        md_content = """
+        # Sample README
+
+        Here is some content.
+
+        ```yaml
+        key1: value1
+        key2: value2
+        ```
+
+        More content here.
+        """
+        expected_output = {"key1": "value1", "key2": "value2"}
+        # As the test introduces indentation to the multistring 'markdown'
+        # we need to unindent here, YAML is indent aware.
+        md_content = textwrap.dedent(md_content)
+        assert (
+            github_api.extract_yaml_from_md(md_content) == expected_output
+        )
+
+    def test_extract_first_yaml_block_only(self):
+        """Test that only the first YAML block is extracted."""
+        md_content = """
+        # Sample README
+
+        ```yaml
+        key1: value1
+        ```
+
+        Some other content.
+
+        ```yaml
+        key2: value2
+        ```
+        """
+        expected_output = {"key1": "value1"}
+        assert (
+            github_api.extract_yaml_from_md(md_content) == expected_output
+        )
+
+    def test_no_recognised_yaml_block(self):
+        """Test that ValueError is raised when no YAML block is present."""
+        md_content = """
+        # Sample README
+
+        Here is some content without YAML.
+        """
+        with pytest.raises(
+            ValueError, match="No YAML found in `md_content`"
+        ):
+            github_api.extract_yaml_from_md(md_content)
+
+        # This scenario is also raised on a YAML code block formatted as
+        # below.
+        md_content = """
+        # Sample README
+
+        ```{yaml}
+        key1: value
+        ```
+        """
+        with pytest.raises(
+            ValueError, match="No YAML found in `md_content`"
+        ):
+            github_api.extract_yaml_from_md(md_content)
+
+    def test_invalid_yaml(self):
+        """Test that YAMLError is raised for invalid YAML content."""
+        # Intentionally malformed YAML
+        md_content = """
+        # Sample README
+
+        ```yaml
+        key1: value1
+        key2: value2
+        key3: [
+        - item1
+        - item2
+        - item3
+        - unclosed array
+        ```
+        """
+        with pytest.raises(YAMLError):
+            github_api.extract_yaml_from_md(md_content)

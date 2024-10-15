@@ -13,7 +13,7 @@ exclude = [
 packages = ["./ai_nexus_backend"]
 [project]
 name = "ai_nexus_backend"
-version = "0.1.0"
+version = "0.1.1"
 requires-python = ">=3.9,<=3.13"
 description = "Modular component for AI-enabled application search backend."
 readme = "README.md"
@@ -32,6 +32,7 @@ dependencies = [
     "pyarrow==17.0.0",
     "pyprojroot==0.3.0",
     "python-dotenv==1.0.1",
+    "pyyaml==6.0.2",
     "requests==2.32.3",
     ]
 
@@ -42,7 +43,6 @@ dev = [
     "hatchling==1.25.0",
     "mockito==1.5.1",
     "pre-commit==4.0.0",
-    "pytest==8.3.3",
 ]
 [project.urls]
 Repository = "https://github.com/ministryofjustice/..."

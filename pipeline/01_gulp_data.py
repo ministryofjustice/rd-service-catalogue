@@ -11,7 +11,7 @@ from ai_nexus_backend.github_api import (
 
 secrets = dotenv.dotenv_values(".env")
 user_agent = secrets["AGENT"]
-pat = secrets["PAT"]  # TODO: Implement OAuth
+pat = secrets["GITHUB_PAT"]
 org_nm1 = secrets["ORG_NM1"]
 org_nm2 = secrets["ORG_NM2"]
 

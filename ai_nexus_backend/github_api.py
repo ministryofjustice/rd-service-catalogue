@@ -2,10 +2,12 @@
 
 from base64 import b64decode
 import re
+import warnings
 
 import pandas as pd
 import requests
 from requests.exceptions import HTTPError
+from yaml import safe_load, YAMLError
 
 from ai_nexus_backend.requests_utils import _configure_requests
 
@@ -73,6 +75,11 @@ def _paginated_get(
             raise PermissionError(
                 "PAT is invalid. Try generating a new PAT."
             )
+        elif r.status_code == 403:
+            warnings.warn(
+                f"Skipping {url}: status {r.status_code}, {r.reason}"
+            )
+            continue
         else:
             print(f"Unable to get repo issues, code: {r.status_code}")
     return responses
@@ -497,3 +504,51 @@ def get_readme_content(
         raise HTTPError(f"HTTP error {resp.status_code}: {resp.reason}")
     # TODO: _handle_response_exception()
     return readme
+
+
+def extract_yaml_from_md(md_content: str) -> dict:
+    """
+    Extract the first YAML block from Markdown content string.
+
+    If several YAML code blocks are included within the README, only the
+    first will be returned. Will not match YAML code blocks with
+    ```{yaml}...``` syntax.
+
+    Parameters
+    ----------
+    md_content : str
+        A string containing Markdown content, which may include YAML code
+        blocks.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the parsed YAML content with keys in
+        lowercase.
+
+    Raises
+    ------
+    ValueError
+        If no YAML block is found in the provided Markdown content.
+    yaml.YAMLError
+        If there is an error parsing the YAML content.
+
+    """
+    # Regular expression pattern to match the FIRST fenced YAML block
+    # won't match curly braces: https://regex101.com/r/oYHdwB/1
+    # though curly braces are valid github MD YAML blocks:
+    # https://github.com/r-leyshon/example_yaml-_metadata
+    yaml_block_pattern = re.compile(r"```yaml([\s\S]*?)```")
+
+    # Search for the first YAML block
+    match = yaml_block_pattern.search(md_content)
+    if match:
+        yaml_content = match.group(1).strip()
+        try:
+            # Parse the first YAML content block
+            yam = safe_load(yaml_content)
+            return {k.lower(): v for k, v in yam.items()}
+        except YAMLError as e:
+            raise YAMLError("Error parsing YAML content:", e)
+    else:
+        raise ValueError("No YAML found in `md_content`")
