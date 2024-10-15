@@ -233,19 +233,19 @@ class TestExtractYamlFromMd:
 
     def test_invalid_yaml(self):
         """Test that YAMLError is raised for invalid YAML content."""
+        # Intentionally malformed YAML
         md_content = """
         # Sample README
 
         ```yaml
         key1: value1
         key2: value2
-        key3:
+        key3: [
         - item1
         - item2
         - item3
+        - unclosed array
         ```
         """
-        # Intentionally malformed YAML
-        md_content_invalid = md_content.replace("key3: \n", "key3: [")
         with pytest.raises(YAMLError):
-            github_api.extract_yaml_from_md(md_content_invalid)
+            github_api.extract_yaml_from_md(md_content)
