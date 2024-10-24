@@ -30,9 +30,16 @@ jobs:
         pre-commit install
         pre-commit autoupdate --repo https://github.com/pre-commit/pre-commit-hooks
         pre-commit run --show-diff-on-failure --color=always --all-files
-
-    - name: Run tests
+    - name: Run Tests and Generate Coverage Report
       env:
         PY_COLORS: 1
       run: |
-        pytest
+        coverage run -m pytest
+        coverage xml
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 #v4.6.0
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        verbose: true
+        token: ${{secrets.CODECOV_TOKEN}}
