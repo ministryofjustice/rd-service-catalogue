@@ -1,6 +1,6 @@
 <!--- Badges start --->
 <img src="https://github.com/ministryofjustice/rd-service-catalogue/actions/workflows/test_pkg.yml/badge.svg" alt="Test suite status"/>
-
+<img src="https://codecov.io/gh/ministryofjustice/rd-service-catalogue/graph/badge.svg?token=HPnUWIPSez" alt="Coverage report"/></a>
 <!--- Badges end --->
 
 # `ai_nexus_backend`
