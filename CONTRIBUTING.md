@@ -79,6 +79,24 @@ To run the tests locally from the cli:
 tests. For more, see
 [How to invoke pytest](https://docs.pytest.org/en/stable/how-to/usage.html).
 
+Test coverage is measured using the `coverage` package. To generate a
+report, first run the test suite:
+
+`coverage run -m pytest`
+
+Then generate a report:
+
+`coverage report`
+
+For a more detailed view of coverage in files, you can generate a coverage
+HTML report:
+
+`coverage html`
+
+Then open the site rendered to the `htmlcov` directory:
+
+`open ./htmlcov/index.html`
+
 ### To build the site:
 
 1. Configure a virtual environment with python 3.12.
