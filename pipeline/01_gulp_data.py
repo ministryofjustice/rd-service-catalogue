@@ -1,12 +1,10 @@
 import dotenv
 from pyprojroot import here
 
-from ai_nexus_backend.github_api import (
-    get_org_repos,
-    get_all_org_repo_metadata,
-)
+from ai_nexus_backend.github_api import GithubClient
 
-
+# set to True for chatty outputs
+debug = False
 # configure secrets -------------------------------------------------------
 
 secrets = dotenv.dotenv_values(".env")
@@ -15,26 +13,27 @@ pat = secrets["GITHUB_PAT"]
 org_nm1 = secrets["ORG_NM1"]
 org_nm2 = secrets["ORG_NM2"]
 
+client = GithubClient(github_pat=pat, user_agent=user_agent)
 
 # gulp data ---------------------------------------------------------------
 
 for nm in [org_nm1, org_nm2]:
-    repos = get_org_repos(org_nm=nm, pat=pat, agent=user_agent)
+    repos = client.get_org_repos(
+        org_nm=nm,
+        public_only=True,
+        debug=debug,
+    )
 
-    custom_props = get_all_org_repo_metadata(
+    custom_props = client.get_all_org_repo_metadata(
         metadata="custom_properties",
         repo_nms=repos["name"],
         org_nm=nm,
-        pat=pat,
-        agent=user_agent,
     )
 
-    topics = get_all_org_repo_metadata(
+    topics = client.get_all_org_repo_metadata(
         metadata="topics",
         repo_nms=repos["name"],
         org_nm=nm,
-        pat=pat,
-        agent=user_agent,
     )
 
     # join tables ---------------------------------------------------------
