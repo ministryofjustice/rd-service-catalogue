@@ -287,7 +287,7 @@ class GithubClient:
 
         Created to help testing regex pattern.
         """
-        _url_defence(repo_url)
+        _url_defence(repo_url, param_nm="repo_url")
         # see https://regex101.com/r/KrKdEj/1 for test cases...
         cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
         owner = cap_groups.group(1)
@@ -327,7 +327,7 @@ class GithubClient:
             If the HTTP request to the GitHub API fails.
         """
         # defence
-        _url_defence(repo_url)
+        _url_defence(repo_url, param_nm="repo_url")
         if not isinstance(accept, str):
             raise TypeError(
                 f"accept expected type str. Found {type(accept)}"

@@ -115,7 +115,7 @@ class ConfluenceClient:
         NotImplementedError
             If more than one code block is found on the page.
         """
-        _url_defence(url)
+        _url_defence(url, param_nm="url")
         self._get_atlassian_page_content(url)  # updates self.response
         soup = BeautifulSoup(self.response.content, "html.parser")
         # there must be a single code element, cannot set or target an ID
@@ -144,6 +144,6 @@ class ConfluenceClient:
         str
             HTML text content.
         """
-        _url_defence(url)
+        _url_defence(url, param_nm="url")
         self._get_atlassian_page_content(url)  # updates self.response
         return self.response.text
