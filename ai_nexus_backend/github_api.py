@@ -2,11 +2,9 @@
 
 from base64 import b64decode
 import re
-import warnings
 
 import pandas as pd
-
-# import requests
+import requests
 from requests.exceptions import HTTPError
 from yaml import safe_load, YAMLError
 
@@ -33,9 +31,19 @@ class GithubClient:
 
     Attributes
     ----------
-    _session : requests.Session
-        The requests session configured with the specified retry strategy
-        and authentication headers.
+    repos: pd.DataFrame
+        Table of repo metadata for a specified GitHub organisation.
+        Populated with get_org_repos() method.
+    topics: pd.DataFrame
+        Table of topics values. Populated by
+        `GithubClient.get_all_org_repo_metadata(metadata="topics")`.
+    custom_properties: pd.DataFrame
+        Table of custom properties values. Populated by
+        ```
+        GithubClient.get_all_org_repo_metadata(
+            metadata="custom_properties"
+        )
+        ```
 
     Methods
     -------
@@ -55,24 +63,26 @@ class GithubClient:
         self.__pat = github_pat
         self.__agent = user_agent
         self._session = self._configure_github()
+        self.repos = pd.DataFrame()
+        self.topics = pd.DataFrame()
+        self.custom_properties = pd.DataFrame()
 
     def _configure_github(self, _session=_configure_requests()):
         """Set up a GitHub request Session with retry & backoff spec."""
         _session.headers = {
             "Authorization": f"Bearer {self.__pat}",
             "User-Agent": self.__agent,
+            "X-GitHub-Api-Version": "2022-11-28",
+            "accept": "application/vnd.github+json",
         }
-        _session.params = {"accept": "application/vnd.github+json"}
         self._session = _session
         return _session
 
     def _paginated_get(
         self,
         url: str,
-        # pat: str,
-        # agent: str,
-        # params: dict = {},
-        # sess: requests.Session = _configure_requests(),
+        sess: requests.Session = _configure_requests(),
+        debug: bool = False,
     ) -> list:
         """Get paginated responses.
 
@@ -80,10 +90,6 @@ class GithubClient:
         ----------
         url : str
             The url string to query.
-        pat : str,
-            The User's GitHub PAT.
-        agent : str,
-            User's browser agent.
         params: dict
             Dictionary of parameters to pass the developer API.
         sess : requests.Session, optional
@@ -102,22 +108,19 @@ class GithubClient:
             The PAT is not recognised by GitHub.
 
         """
-        sess = self._session
         page = 1
         responses = list()
         while True:
-            print(f"Requesting page {page}")
+            if debug:
+                print(f"Requesting page {page}")
+                print(f"Next iter url: {url}")
+                print(f"Request headers: {self._session.headers}")
+                print(f"Request params: {self._session.params}")
             sess.params["page"] = page
-            # params["page"] = page
-            # r = sess.get(
-            #     url,
-            #     headers={
-            #         "Authorization": f"Bearer {pat}",
-            #         "User-Agent": agent,
-            #     },
-            #     params=params,
-            # )
-            r = sess.get(url)
+            r = self._session.get(url)
+            if debug:
+                print(f"Paginated status code: {r.status_code}")
+                print(f"Response links: {r.links}")
             if r.ok:
                 responses.append(r.json())
                 if "next" in r.links:
@@ -135,21 +138,21 @@ class GithubClient:
                     "PAT is invalid. Try generating a new PAT."
                 )
             elif r.status_code == 403:
-                warnings.warn(
-                    f"Skipping {url}: status {r.status_code}, {r.reason}"
+                # resource forbidden, likely PAT scopes problem
+                raise PermissionError(
+                    "Have you configured the PAT with SSO?"
                 )
-                continue
             else:
-                print(f"Unable to get repo issues, code: {r.status_code}")
+                raise HTTPError(
+                    f"Unable to get repo: {r.status_code}, {r.reason}"
+                )
         return responses
 
     def get_org_repos(
         self,
         org_nm: str,
-        # pat: str,
-        # agent: str,
-        # sess: requests.Session = _configure_requests(),
-        public_only: bool = False,
+        public_only: bool = True,
+        debug: bool = False,
     ) -> pd.DataFrame:
         """Get repo metadata for all repos in a GitHub organisation.
 
@@ -157,10 +160,6 @@ class GithubClient:
         ----------
         org_nm : str,
             The organisation name, by default ORG_NM (read from .env)
-        pat : str,
-            GitHub user PAT
-        agent : str,
-            User agent, by default USER_AGENT
         sess : requests.Session, optional
             Session configured with retry strategy, by default
             _configure_requests() default values of n=5, backoff_f=0.1,
@@ -169,7 +168,9 @@ class GithubClient:
             If the GitHub PAT has private scopes for the organisation you
             are requesting, then private repo metadata will also be
             returned. To filter to public repo matadata only, set this
-            parameter to True. Defaults to False.
+            parameter to True. Defaults to True.
+        debug: bool
+            Whether to print debug statements. False by default.
 
         Returns
         -------
@@ -177,8 +178,7 @@ class GithubClient:
             Table of repo metadat.
 
         """
-        sess = self._session
-        # GitHub API endpoint to list pull requests for the organization
+        # GitHub API endpoint to list repos for the organization
         org_repos_url = f"https://api.github.com/orgs/{org_nm}/repos"
         params = {}
         if public_only:
@@ -187,7 +187,9 @@ class GithubClient:
         # responses = self._paginated_get(
         #     org_repos_url, sess=sess, pat=pat, params=params, agent=agent
         # )
-        responses = self._paginated_get(org_repos_url, sess=sess)
+        responses = self._paginated_get(
+            org_repos_url, sess=self._session, debug=debug
+        )
         DTYPES = {
             "html_url": str,
             "repo_url": str,
@@ -220,6 +222,7 @@ class GithubClient:
 
                 all_repo_deets = pd.concat([all_repo_deets, repo_deets])
 
+        self.repos = all_repo_deets
         return all_repo_deets
 
     def get_all_org_repo_metadata(
@@ -227,9 +230,6 @@ class GithubClient:
         metadata: str,
         repo_nms: list,
         org_nm: str,
-        # pat: str,
-        # agent: str,
-        # sess: requests.Session = _configure_requests(),
     ) -> pd.DataFrame:
         """Get every repo metadata item for entire org.
 
@@ -244,14 +244,6 @@ class GithubClient:
             List of the repo name strings
         org_nm : str,
             The name of the organisation, by default ORG_NM (from .env)
-        pat : str,
-            User's PAT code, by default PAT (from .env)
-        agent : str,
-            User agent string, by default USER_AGENT (from .secrets.toml)
-        sess : requests.Session, optional
-            requests.Session configured with retry strategy, by default
-            _configure_requests() default values of n=5, backoff_f=0.1,
-            force_on=[500, 502, 503, 504]
 
         Returns
         -------
@@ -267,8 +259,10 @@ class GithubClient:
         m = metadata.lower().strip()
         if m == "custom_properties":
             url_slug = "properties/values"
+            target_attr = self.custom_properties
         elif m == "topics":
             url_slug = m
+            target_attr = self.topics
         else:
             raise NotImplementedError(
                 "Metadata 'custom_properties' and 'topics' are supported"
@@ -280,21 +274,12 @@ class GithubClient:
             print(f"Get {m} for {repo_nm}, {i+1}/{n_repos} done.")
             repo_url = f"https://api.github.com/repos/{org_nm}/{repo_nm}"
             query_url = f"{repo_url}/{url_slug}"
-            # PARAMS = {"accept": "application/vnd.github+json"}
-            # repo_meta = sess.get(
-            #     query_url,
-            #     headers={
-            #         "Authorization": f"Bearer {pat}",
-            #         "User-Agent": agent,
-            #     },
-            #     params=PARAMS,
-            # )
             repo_meta = self._session.get(query_url)
             current_row = pd.DataFrame(
                 {"repo_url": repo_url, m: [repo_meta.json()]}
             )
             all_meta = pd.concat([all_meta, current_row])
-
+        setattr(obj=self, name=target_attr, value=all_meta)
         return all_meta
 
     def _assemble_readme_endpoint_from_repo_url(self, repo_url: str):
@@ -312,8 +297,6 @@ class GithubClient:
     def get_readme_content(
         self,
         repo_url: str,
-        # pat: str,
-        # agent: str,
         accept: str = "application/vnd.github+json",
     ):
         """Fetches the README content from a single GitHub repository.
@@ -322,10 +305,6 @@ class GithubClient:
         ----------
         repo_url : str
             The URL of the GitHub repository.
-        pat : str
-            The personal access token for GitHub API authentication.
-        agent : str
-            The user agent string to be sent with the request.
         accept : str, optional
             The media type to accept in the response. Defaults to
             "application/vnd.github+json".
@@ -363,12 +342,6 @@ class GithubClient:
             )
         params = {"accept": accept}
         endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
-        # resp = requests.get(
-        #     endpoint,
-        #     params=params,
-        #     headers={
-        # "Authorization": f"Bearer {pat}", "User-Agent": agent},
-        # )
         resp = self._session.get(
             endpoint,
             params=params,
@@ -385,7 +358,6 @@ class GithubClient:
             raise HTTPError(
                 f"HTTP error {resp.status_code}: {resp.reason}"
             )
-        # TODO: _handle_response_exception()
         return readme
 
     def extract_yaml_from_md(self, md_content: str) -> dict:
