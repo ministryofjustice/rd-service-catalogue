@@ -57,38 +57,39 @@ class TestGithubClient:
         "https://api.github.com/repos/ministryofjustice/calendars/readme",
     ]
 
+    @pytest.fixture(scope="function")
+    def client_fixture(self):
+        """Fixture avoids repeated instantiation in tests."""
+        return github_api.GithubClient(github_pat="foo", user_agent="bar")
+
     @pytest.mark.parametrize(
         "repo_url, endpoint_url", zip(_test_cases, _expected_endpoints)
     )
     def test__assemble_readme_endpoint_from_repo_url_returns_expected_str(
-        self, repo_url, endpoint_url
+        self, repo_url, endpoint_url, client_fixture
     ):
         """Loop through every repo url, check func returns exp endpoint."""
-        client = github_api.GithubClient(
-            github_pat="foo", user_agent="bar"
-        )
         assert (
-            client._assemble_readme_endpoint_from_repo_url(repo_url)
+            client_fixture._assemble_readme_endpoint_from_repo_url(
+                repo_url
+            )
             == endpoint_url
         )
 
-    def test_get_readme_content_defence(self):
+    def test_get_readme_content_defence(self, client_fixture):
         """Check defensive logic."""
-        client = github_api.GithubClient(
-            github_pat="foo", user_agent="bar"
-        )
         with pytest.raises(
             TypeError,
             match="repo_url expected type str. Found <class 'int'>",
         ):
-            client.get_readme_content(repo_url=1)
+            client_fixture.get_readme_content(repo_url=1)
         with pytest.raises(
             ValueError,
             match=re.escape(
                 "accept expects either application/vnd.github+json or app"
             ),
         ):
-            client.get_readme_content(
+            client_fixture.get_readme_content(
                 repo_url="https://foobar",
                 accept="wrong",
             )
@@ -96,16 +97,13 @@ class TestGithubClient:
             ValueError,
             match="repo_url should begin with 'https://', found http://",
         ):
-            client.get_readme_content(
+            client_fixture.get_readme_content(
                 repo_url="http://NOT_SUPPORTED",
             )
 
-    def test_get_readme_content(self):
+    def test_get_readme_content(self, client_fixture):
         """Mocked test ensuring byte code returned as expected string."""
         # Mock the response of the get_readme_content function
-        client = github_api.GithubClient(
-            github_pat="fake_pat", user_agent="fake_agent"
-        )
         mock_response = requests.Response()
         mock_response.status_code = 200
         _b1 = b'{"content": "VGhpcyBpcyB0aGUgUkVBRE1FIGNvbnRlbnQ=",'
@@ -116,7 +114,7 @@ class TestGithubClient:
         # Mock the requests.get call inside get_readme_content.
         when(requests).get(...).thenReturn(mock_response)
         # Call & assert
-        result = client.get_readme_content(
+        result = client_fixture.get_readme_content(
             "https://github.com/owner/repo",
         )
         assert result == "This is the README content"
@@ -124,17 +122,14 @@ class TestGithubClient:
 
         # repeat for accept HTML
         when(requests).get(...).thenReturn(mock_response)
-        result = client.get_readme_content(
+        result = client_fixture.get_readme_content(
             "https://github.com/owner/repo",
             accept="application/vnd.github.html+json",
         )
         assert result == "FOOBAR"
         unstub()
 
-    def test_extract_valid_yaml(self):
-        client = github_api.GithubClient(
-            github_pat="foo", user_agent="bar"
-        )
+    def test_extract_valid_yaml(self, client_fixture):
         """Test extraction of valid YAML from Markdown content."""
         md_content = """
         # Sample README
@@ -152,13 +147,13 @@ class TestGithubClient:
         # As the test introduces indentation to the multistring 'markdown'
         # we need to unindent here, YAML is indent aware.
         md_content = textwrap.dedent(md_content)
-        assert client.extract_yaml_from_md(md_content) == expected_output
-
-    def test_extract_first_yaml_block_only(self):
-        """Test that only the first YAML block is extracted."""
-        client = github_api.GithubClient(
-            github_pat="foo", user_agent="bar"
+        assert (
+            client_fixture.extract_yaml_from_md(md_content)
+            == expected_output
         )
+
+    def test_extract_first_yaml_block_only(self, client_fixture):
+        """Test that only the first YAML block is extracted."""
         md_content = """
         # Sample README
 
@@ -173,13 +168,13 @@ class TestGithubClient:
         ```
         """
         expected_output = {"key1": "value1"}
-        assert client.extract_yaml_from_md(md_content) == expected_output
-
-    def test_no_recognised_yaml_block(self):
-        """Test that ValueError is raised when no YAML block is present."""
-        client = github_api.GithubClient(
-            github_pat="foo", user_agent="bar"
+        assert (
+            client_fixture.extract_yaml_from_md(md_content)
+            == expected_output
         )
+
+    def test_no_recognised_yaml_block(self, client_fixture):
+        """Test that ValueError is raised when no YAML block is present."""
         md_content = """
         # Sample README
 
@@ -188,7 +183,7 @@ class TestGithubClient:
         with pytest.raises(
             ValueError, match="No YAML found in `md_content`"
         ):
-            client.extract_yaml_from_md(md_content)
+            client_fixture.extract_yaml_from_md(md_content)
 
         # This scenario is also raised on a YAML code block formatted as
         # below.
@@ -202,13 +197,10 @@ class TestGithubClient:
         with pytest.raises(
             ValueError, match="No YAML found in `md_content`"
         ):
-            client.extract_yaml_from_md(md_content)
+            client_fixture.extract_yaml_from_md(md_content)
 
-    def test_invalid_yaml(self):
+    def test_invalid_yaml(self, client_fixture):
         """Test that YAMLError is raised for invalid YAML content."""
-        client = github_api.GithubClient(
-            github_pat="foo", user_agent="bar"
-        )
         # Intentionally malformed YAML
         md_content = """
         # Sample README
@@ -224,4 +216,4 @@ class TestGithubClient:
         ```
         """
         with pytest.raises(YAMLError):
-            client.extract_yaml_from_md(md_content)
+            client_fixture.extract_yaml_from_md(md_content)
