@@ -52,6 +52,7 @@ class TestConfluenceClient:
     def test__url_defence(self, confluence_client):
         """Test defensive utility raises as expected."""
         client = confluence_client
+        # test type defence
         with pytest.raises(TypeError, match=".* found <class 'int'>"):
             client._url_defence(url=1)
         with pytest.raises(TypeError, match=".* found <class 'float'>"):
@@ -60,6 +61,11 @@ class TestConfluenceClient:
             client._url_defence(url=False)
         with pytest.raises(TypeError, match=".* found <class 'NoneType'>"):
             client._url_defence(url=None)
+        # test values
+        with pytest.raises(
+            ValueError, match="`url` should start with 'https://'"
+        ):
+            client._url_defence(url="http://something")
 
     def test__configure_atlassian(self, confluence_client):
         """Check that default requests session can be reconfigured."""
