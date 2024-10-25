@@ -10,7 +10,10 @@ import pandas as pd
 from requests.exceptions import HTTPError
 from yaml import safe_load, YAMLError
 
-from ai_nexus_backend.requests_utils import _configure_requests
+from ai_nexus_backend.requests_utils import (
+    _configure_requests,
+    _url_defence,
+)
 
 
 class GithubClient:
@@ -266,6 +269,7 @@ class GithubClient:
 
         Created to help testing regex pattern.
         """
+        _url_defence(repo_url)
         # see https://regex101.com/r/KrKdEj/1 for test cases...
         cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
         owner = cap_groups.group(1)
@@ -311,15 +315,11 @@ class GithubClient:
             If the HTTP request to the GitHub API fails.
         """
         # defence
-        str_params = {
-            "repo_url": repo_url,
-            # "pat": pat,
-            # "agent": agent,
-            "accept": accept,
-        }
-        for k, v in str_params.items():
-            if not isinstance(v, str):
-                raise TypeError(f"{k} expected type str. Found {type(v)}.")
+        _url_defence(repo_url)
+        if not isinstance(accept, str):
+            raise TypeError(
+                f"accept expected type str. Found {type(accept)}"
+            )
         accept_vals = [
             "application/vnd.github+json",
             "application/vnd.github.html+json",
@@ -328,10 +328,6 @@ class GithubClient:
             raise ValueError(
                 f"accept expects either {' or '.join(accept_vals)}"
             )
-        if not repo_url.startswith("https://"):
-            raise ValueError(
-                f"repo_url must start 'https://', found {repo_url[0:7]}"
-            )  # TODO: Move to _url_defence?
         params = {"accept": accept}
         endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
         # resp = requests.get(
