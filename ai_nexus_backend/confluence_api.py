@@ -88,8 +88,6 @@ class ConfluenceClient:
         HTTPError
             If the HTTP request to the Confluence API fails.
         """
-        if not isinstance(url, str):
-            raise TypeError()
         resp = self._session.get(url)
         if resp.ok:
             self.response = resp
