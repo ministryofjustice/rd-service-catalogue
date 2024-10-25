@@ -17,6 +17,39 @@ from ai_nexus_backend.requests_utils import (
 
 
 class GithubClient:
+    """
+    A client for interacting with the GitHub API.
+
+    This class provides methods to query the GitHub API, handling
+    authentication, pagination, and error handling.
+
+    Parameters
+    ----------
+    github_pat : str
+        The personal access token for GitHub API authentication.
+    user_agent : str, optional
+        The user agent string to be used in HTTP requests. Defaults to
+        None.
+
+    Attributes
+    ----------
+    _session : requests.Session
+        The requests session configured with the specified retry strategy
+        and authentication headers.
+
+    Methods
+    -------
+    get_org_repos()
+        Get all repositories for a specified GitHub organisation.
+    get_all_org_repo_metadata()
+        Get topics or custom properties for all repos in a GitHub
+        organisation.
+    get_readme_content()
+        Get the README content for a single repository.
+    extract_yaml_from_md()
+        Get YAML metadata content from a README content string.
+
+    """
 
     def __init__(self, github_pat, user_agent=None):
         self.__pat = github_pat
