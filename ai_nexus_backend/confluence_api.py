@@ -46,15 +46,6 @@ class ConfluenceClient:
         self.__agent = user_agent
         self._session = self._configure_atlassian()
 
-    def _url_defence(self, url: str) -> None:
-        """Internal utility for defence checking urls."""
-        if not isinstance(url, str):
-            raise TypeError(f"`url` requires a string, found {type(url)}")
-        elif not url.startswith(r"https://"):
-            raise ValueError("`url` should start with 'https://'")
-        else:
-            pass
-
     def _configure_atlassian(self, _session=_configure_requests()):
         """Set up a request Session with retry & backoff spec."""
         _session.auth = (self.__email, self.__pat)
@@ -65,6 +56,15 @@ class ConfluenceClient:
         _session.headers["Content-Type"] = "application/json"
         self._session = _session
         return _session
+
+    def _url_defence(self, url: str) -> None:
+        """Internal utility for defence checking urls."""
+        if not isinstance(url, str):
+            raise TypeError(f"`url` requires a string, found {type(url)}")
+        elif not url.startswith(r"https://"):
+            raise ValueError("`url` should start with 'https://'")
+        else:
+            pass
 
     def _get_atlassian_page_content(self, url: str) -> Response:
         """Get the content of a specified Confluence page.
