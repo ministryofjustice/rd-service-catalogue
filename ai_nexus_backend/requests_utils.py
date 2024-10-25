@@ -36,11 +36,11 @@ def _configure_requests(
     return s
 
 
-def _url_defence(url: str) -> None:
+def _url_defence(url: str, exp_protocol: str = "https://") -> None:
     """Internal utility for defence checking urls."""
     if not isinstance(url, str):
         raise TypeError(f"`url` requires a string, found {type(url)}")
-    elif not url.startswith(r"https://"):
-        raise ValueError("`url` should start with 'https://'")
+    elif not url.startswith(exp_protocol):
+        raise ValueError(f"`url` should start with '{exp_protocol}'")
     else:
         pass
