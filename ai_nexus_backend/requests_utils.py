@@ -34,3 +34,13 @@ def _configure_requests(
     )
     s.mount("https://", requests.adapters.HTTPAdapter(max_retries=retries))
     return s
+
+
+def _url_defence(url: str) -> None:
+    """Internal utility for defence checking urls."""
+    if not isinstance(url, str):
+        raise TypeError(f"`url` requires a string, found {type(url)}")
+    elif not url.startswith(r"https://"):
+        raise ValueError("`url` should start with 'https://'")
+    else:
+        pass
