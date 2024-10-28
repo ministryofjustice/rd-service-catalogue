@@ -42,8 +42,10 @@ class TestConfluenceClient:
             def content(self):
                 if self.url == "https://example.com/no_code_block":
                     return b"<div>No code block here</div>"
-                elif self.url == "https://example.com/single_code_block":
-                    return b'<code>{"title": "awesome project"}</code>'
+                elif self.url == "https://example.com/json_code_block":
+                    return b'<code>{"title": "json project"}</code>'
+                elif self.url == "https://example.com/yaml_code_block":
+                    return b'<code>{"title": "yaml project"}</code>'
                 elif (
                     self.url == "https://example.com/multiple_code_blocks"
                 ):
@@ -90,7 +92,7 @@ class TestConfluenceClient:
         client = confluence_client
         # single code block should pass -----------------------------------
         # Mock the _get_atlassian_page_content method
-        url = "https://example.com/single_code_block"
+        url = "https://example.com/json_code_block"
         when(client)._get_atlassian_page_content(url).thenReturn(
             response_fixt
         )
@@ -99,7 +101,7 @@ class TestConfluenceClient:
         metadata = client.extract_json_metadata(url)
         # Assert the expected metadata
         assert isinstance(metadata, dict)
-        expected_metadata = {"title": "awesome project"}
+        expected_metadata = {"title": "json project"}
         assert metadata == expected_metadata
         unstub()
         # no code block must raise ----------------------------------------
@@ -132,7 +134,7 @@ class TestConfluenceClient:
         client = confluence_client
         # single code block should pass -----------------------------------
         # Mock the _get_atlassian_page_content method
-        url = "https://example.com/single_code_block"
+        url = "https://example.com/yaml_code_block"
         when(client)._get_atlassian_page_content(url).thenReturn(
             response_fixt
         )
@@ -141,7 +143,7 @@ class TestConfluenceClient:
         metadata = client.extract_yaml_metadata(url)
         # Assert the expected metadata
         assert isinstance(metadata, dict)
-        expected_metadata = {"title": "awesome project"}
+        expected_metadata = {"title": "yaml project"}
         assert metadata == expected_metadata
         unstub()
         # no code block must raise ----------------------------------------
