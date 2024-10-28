@@ -5,6 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from requests import HTTPError, Response
 
+from ai_nexus_backend.build_yaml import _parse_yaml
 from ai_nexus_backend.requests_utils import (
     _configure_requests,
     _url_defence,
@@ -36,9 +37,10 @@ class ConfluenceClient:
 
     Methods
     -------
-    find_code_metadata(url:str) -> dict
-        Extracts metadata from present in a code block for the provided
-        url.
+    extract_json_metadata(url:str) -> dict
+        Ectract metadata from a site with a JSON code block.
+    extract_yaml_metadata(url:str) -> dict
+        Extracts metadata from a site with a YAML code block.
     return_page_text(url:str) -> str
         Returns the web page text for the provided url.
     """
@@ -89,9 +91,28 @@ class ConfluenceClient:
         else:
             raise HTTPError(resp.raise_for_status())
 
-    def find_code_metadata(self, url: str) -> dict:
+    def _find_code_metadata(self, url: str) -> dict:
+        """Update meta_text attribute with content str from url."""
+
+        _url_defence(url, param_nm="url")
+        self._get_atlassian_page_content(url)  # updates self.response
+        soup = BeautifulSoup(self.response.content, "html.parser")
+        # there must be a single code element, cannot set or target an ID
+        code_elements = soup.find_all("code")
+        n = len(code_elements)
+        if n == 0:
+            raise ValueError("No code elements were found on this page.")
+        elif n > 1:
+            raise NotImplementedError(
+                "More than one code block was found on this page."
+            )
+        meta_text = code_elements[0].text
+        self.meta_text = meta_text
+        return meta_text
+
+    def extract_json_metadata(self, url: str) -> dict:
         """
-        Extracts metadata from a code block in page content.
+        Extracts metadata from a JSON code block in url site content.
 
         Currently only works for pages with a single, dedicated code
         element.
@@ -115,19 +136,39 @@ class ConfluenceClient:
         NotImplementedError
             If more than one code block is found on the page.
         """
-        _url_defence(url, param_nm="url")
-        self._get_atlassian_page_content(url)  # updates self.response
-        soup = BeautifulSoup(self.response.content, "html.parser")
-        # there must be a single code element, cannot set or target an ID
-        code_elements = soup.find_all("code")
-        n = len(code_elements)
-        if n == 0:
-            raise ValueError("No code elements were found on this page.")
-        elif n > 1:
-            raise NotImplementedError(
-                "More than one code block was found on this page."
-            )
-        meta = json.loads(code_elements[0].text)
+        self._find_code_metadata(url)
+        meta = json.loads(self.meta_text)
+        self.metadata = meta
+        return meta
+
+    def extract_yaml_metadata(self, url: str) -> dict:
+        """
+        Extracts metadata from a YAML code block in url site content.
+
+        Currently only works for pages with a single, dedicated code
+        element.
+
+        Parameters
+        ----------
+        url : str
+            The URL of the Confluence page.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the extracted metadata.
+
+        Raises
+        ------
+        TypeError
+            If `soup` is not a BeautifulSoup object or None.
+        ValueError
+            If no code elements are found.
+        NotImplementedError
+            If more than one code block is found on the page.
+        """
+        self._find_code_metadata(url)
+        meta = _parse_yaml(self.meta_text)
         self.metadata = meta
         return meta
 
