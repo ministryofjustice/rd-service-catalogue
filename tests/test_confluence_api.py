@@ -60,8 +60,8 @@ class TestConfluenceClient:
             == new_sess.adapters["https://"].total
         )
 
-    def test_find_code_metadata(self, confluence_client):
-        """Test find_code_metadata method with mocked response."""
+    def test_extract_json_metadata(self, confluence_client):
+        """Test extract_json_metadata method with mocked response."""
 
         def mock_response(url):
             """Return a mock response object with code block element."""
@@ -91,7 +91,7 @@ class TestConfluenceClient:
         )
         client.response = mock_response(url)
         # Use and assert
-        metadata = client.find_code_metadata(url)
+        metadata = client.extract_json_metadata(url)
         # Assert the expected metadata
         assert isinstance(metadata, dict)
         expected_metadata = {"title": "awesome project"}
@@ -106,7 +106,7 @@ class TestConfluenceClient:
         with pytest.raises(
             ValueError, match="No code elements were found on this page."
         ):
-            client.find_code_metadata(url)
+            client.extract_json_metadata(url)
         unstub()
         # multiple code blocks has not been implemented -------------------
         url = "https://example.com/multiple_code_blocks"
@@ -118,7 +118,7 @@ class TestConfluenceClient:
             NotImplementedError,
             match="More than one code block was found on this page.",
         ):
-            client.find_code_metadata(url)
+            client.extract_json_metadata(url)
         unstub()
 
     def test_return_page_text(self, confluence_client):
