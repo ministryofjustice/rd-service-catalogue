@@ -121,6 +121,67 @@ class TestConfluenceClient:
             client.extract_json_metadata(url)
         unstub()
 
+    def test_extract_yaml_metadata(self, confluence_client):
+        """Test extract_json_metadata method with mocked response."""
+
+        def mock_response(url):
+            """Return a mock response object with code block element."""
+
+            class MockResponse:
+                @property
+                def content(self):
+                    if url == "https://example.com/no_code_block":
+                        return b"<div>No code block here</div>"
+                    elif url == "https://example.com/single_code_block":
+                        return b'<code>{"title": "awesome project"}</code>'
+                    elif url == "https://example.com/multiple_code_blocks":
+                        return (
+                            b'<code>{"title": "first project"}</code>'
+                            + b'<code>{"title": "second project"}</code>'
+                        )
+
+            return MockResponse()
+
+        # set up
+        client = confluence_client
+        # single code block should pass -----------------------------------
+        # Mock the _get_atlassian_page_content method
+        url = "https://example.com/single_code_block"
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            mock_response
+        )
+        client.response = mock_response(url)
+        # Use and assert
+        metadata = client.extract_yaml_metadata(url)
+        # Assert the expected metadata
+        assert isinstance(metadata, dict)
+        expected_metadata = {"title": "awesome project"}
+        assert metadata == expected_metadata
+        unstub()
+        # no code block must raise ----------------------------------------
+        url = "https://example.com/no_code_block"
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            mock_response
+        )
+        client.response = mock_response(url)
+        with pytest.raises(
+            ValueError, match="No code elements were found on this page."
+        ):
+            client.extract_yaml_metadata(url)
+        unstub()
+        # multiple code blocks has not been implemented -------------------
+        url = "https://example.com/multiple_code_blocks"
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            mock_response
+        )
+        client.response = mock_response(url)
+        with pytest.raises(
+            NotImplementedError,
+            match="More than one code block was found on this page.",
+        ):
+            client.extract_yaml_metadata(url)
+        unstub()
+
     def test_return_page_text(self, confluence_client):
         """Test return_page_text method with mocked response."""
 
