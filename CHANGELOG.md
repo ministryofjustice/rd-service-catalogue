@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2024-10-28
+
+### Added
+
+- Introduces `extract_yaml_metadata()` method to
+`ai_nexus_backend.confluence_api.ConfluenceClient`.
+- Coverage checks in CI.
+- Implementation examples in `notebooks` directory.
+
+### Changed
+
+- `ai_nexus_backend.confluence_api.ConfluenceClient` refactored method
+`_find_code_metadata()` to `extract_json_metadata()`.
+- Introduces `GitHubClient` to `ai_nexus_backend.github_api`. More
+efficient storing of authentication credentials.
+
 ## [0.1.1] - 2024-10-15
 
 ### Added
