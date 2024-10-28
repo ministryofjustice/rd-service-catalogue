@@ -6,8 +6,8 @@ import re
 import pandas as pd
 import requests
 from requests.exceptions import HTTPError
-from yaml import safe_load, YAMLError
 
+from ai_nexus_backend.build_yaml import _parse_yaml
 from ai_nexus_backend.requests_utils import (
     _configure_requests,
     _url_defence,
@@ -402,11 +402,6 @@ class GithubClient:
         match = yaml_block_pattern.search(md_content)
         if match:
             yaml_content = match.group(1).strip()
-            try:
-                # Parse the first YAML content block
-                yam = safe_load(yaml_content)
-                return {k.lower(): v for k, v in yam.items()}
-            except YAMLError as e:
-                raise YAMLError("Error parsing YAML content:", e)
+            return _parse_yaml(yaml_content)
         else:
             raise ValueError("No YAML found in `md_content`")
