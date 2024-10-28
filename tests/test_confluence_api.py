@@ -35,7 +35,7 @@ class TestConfluenceClient:
         """Return a mock response object with code block element."""
 
         class MockResponse:
-            def __init__(self, url, *args, **kwargs):
+            def __init__(self, url):
                 self.url = url
 
             @property
