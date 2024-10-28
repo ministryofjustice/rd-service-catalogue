@@ -1,6 +1,17 @@
 import pathlib
 
 import pandas as pd
+from yaml import safe_load, YAMLError
+
+
+def _parse_yaml(content_str: str) -> dict:
+    """Utility for safely converting content string to valid YAML"""
+    try:
+        # Parse the first YAML content block
+        yam = safe_load(content_str)
+        return {k.lower(): v for k, v in yam.items()}
+    except YAMLError as e:
+        raise YAMLError("Error parsing YAML content:", e)
 
 
 def build_listings_from_parquet(
