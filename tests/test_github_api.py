@@ -84,6 +84,13 @@ class TestGithubClient:
         ):
             client_fixture.get_readme_content(repo_url=1)
         with pytest.raises(
+            TypeError,
+            match="accept expected type str. Found <class 'int'>",
+        ):
+            client_fixture.get_readme_content(
+                repo_url="https://foobar", accept=1
+            )
+        with pytest.raises(
             ValueError,
             match=re.escape(
                 "accept expects either application/vnd.github+json or app"
