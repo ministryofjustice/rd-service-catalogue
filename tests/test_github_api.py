@@ -107,6 +107,11 @@ class TestGithubClient:
             client_fixture.get_readme_content(
                 repo_url="http://NOT_SUPPORTED",
             )
+        with pytest.raises(
+            ValueError,
+            match="Did not find expected url Structure for https://foobar",
+        ):
+            client_fixture.get_readme_content(repo_url="https://foobar")
 
     def test_get_readme_content(self, client_fixture):
         """Mocked test ensuring byte code returned as expected string."""
