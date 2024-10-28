@@ -342,9 +342,8 @@ class GithubClient:
             )
         params = {"accept": accept}
         endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
-        resp = self._session.get(
-            endpoint,
-            params=params,
+        resp = requests.get(
+            endpoint, params=params, headers=self._session.headers
         )
         if resp.ok:
             content = resp.json()

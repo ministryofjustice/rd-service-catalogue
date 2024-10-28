@@ -126,7 +126,7 @@ class TestGithubClient:
             "https://github.com/owner/repo",
             accept="application/vnd.github.html+json",
         )
-        assert result == "FOOBAR"
+        assert result == "This is the README content"
         unstub()
 
     def test_extract_valid_yaml(self, client_fixture):
