@@ -290,9 +290,14 @@ class GithubClient:
         _url_defence(repo_url, param_nm="repo_url")
         # see https://regex101.com/r/KrKdEj/1 for test cases...
         cap_groups = re.search(r"github\.com/([^/]+)/([^/]+)", repo_url)
-        owner = cap_groups.group(1)
-        repo_nm = cap_groups.group(2)
-        return f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
+        if cap_groups:
+            owner = cap_groups.group(1)
+            repo_nm = cap_groups.group(2)
+            return f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
+        else:
+            raise ValueError(
+                f"Did not find expected url Structure for {repo_url}"
+            )
 
     def get_readme_content(
         self,
