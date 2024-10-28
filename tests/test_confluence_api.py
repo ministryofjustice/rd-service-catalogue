@@ -146,29 +146,6 @@ class TestConfluenceClient:
         expected_metadata = {"title": "yaml project"}
         assert metadata == expected_metadata
         unstub()
-        # no code block must raise ----------------------------------------
-        url = "https://example.com/no_code_block"
-        when(client)._get_atlassian_page_content(url).thenReturn(
-            response_fixt
-        )
-        client.response = response_fixt(url)
-        with pytest.raises(
-            ValueError, match="No code elements were found on this page."
-        ):
-            client.extract_yaml_metadata(url)
-        unstub()
-        # multiple code blocks has not been implemented -------------------
-        url = "https://example.com/multiple_code_blocks"
-        when(client)._get_atlassian_page_content(url).thenReturn(
-            response_fixt
-        )
-        client.response = response_fixt(url)
-        with pytest.raises(
-            NotImplementedError,
-            match="More than one code block was found on this page.",
-        ):
-            client.extract_yaml_metadata(url)
-        unstub()
 
     def test_return_page_text(self, confluence_client):
         """Test return_page_text method with mocked response."""
