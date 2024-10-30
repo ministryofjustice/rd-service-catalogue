@@ -13,6 +13,14 @@ from ai_nexus_backend import github_api
 
 
 class TestGithubClient:
+    """Mocked integration with GitHub Dev API.
+
+    `_test_cases` and `_expected_endpoints` Used to test
+    `GithubClient._assemble_readme_endpoint_from_repo_url` matches target
+    repo URLs & constructs the necessary API endpoints. These test are
+    isolated from the GitHub developer API and will not require any
+    external configuration to run.
+    """
 
     _test_cases = [
         "https://github.com/ministryofjustice/government-digital-strategy",
