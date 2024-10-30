@@ -12,8 +12,15 @@ from yaml import YAMLError
 from ai_nexus_backend import github_api
 
 
-class Test_AssembleReadmeEndpointFromRepoUrl:
-    """Regex pattern testing for internal utility."""
+class TestGithubClient:
+    """Mocked integration with GitHub Dev API.
+
+    `_test_cases` and `_expected_endpoints` Used to test
+    `GithubClient._assemble_readme_endpoint_from_repo_url` matches target
+    repo URLs & constructs the necessary API endpoints. These test are
+    isolated from the GitHub developer API and will not require any
+    external configuration to run.
+    """
 
     _test_cases = [
         "https://github.com/ministryofjustice/government-digital-strategy",
@@ -58,30 +65,38 @@ class Test_AssembleReadmeEndpointFromRepoUrl:
         "https://api.github.com/repos/ministryofjustice/calendars/readme",
     ]
 
+    @pytest.fixture(scope="function")
+    def client_fixture(self):
+        """Fixture avoids repeated instantiation in tests."""
+        return github_api.GithubClient(github_pat="foo", user_agent="bar")
+
     @pytest.mark.parametrize(
         "repo_url, endpoint_url", zip(_test_cases, _expected_endpoints)
     )
     def test__assemble_readme_endpoint_from_repo_url_returns_expected_str(
-        self, repo_url, endpoint_url
+        self, repo_url, endpoint_url, client_fixture
     ):
         """Loop through every repo url, check func returns exp endpoint."""
         assert (
-            github_api._assemble_readme_endpoint_from_repo_url(repo_url)
+            client_fixture._assemble_readme_endpoint_from_repo_url(
+                repo_url
+            )
             == endpoint_url
         )
 
-
-class TestGetReadmeContent(object):
-    """Tests for get_readme_content()."""
-
-    def test_get_readme_content_defence(self):
+    def test_get_readme_content_defence(self, client_fixture):
         """Check defensive logic."""
         with pytest.raises(
             TypeError,
-            match="repo_url expected type str. Found <class 'int'>.",
+            match="repo_url expected type str. Found <class 'int'>",
         ):
-            github_api.get_readme_content(
-                repo_url=1, pat="foo", agent="bar"
+            client_fixture.get_readme_content(repo_url=1)
+        with pytest.raises(
+            TypeError,
+            match="accept expected type str. Found <class 'int'>",
+        ):
+            client_fixture.get_readme_content(
+                repo_url="https://foobar", accept=1
             )
         with pytest.raises(
             ValueError,
@@ -89,23 +104,24 @@ class TestGetReadmeContent(object):
                 "accept expects either application/vnd.github+json or app"
             ),
         ):
-            github_api.get_readme_content(
-                repo_url="foobar",
-                pat="foo",
-                agent="bar",
+            client_fixture.get_readme_content(
+                repo_url="https://foobar",
                 accept="wrong",
             )
         with pytest.raises(
             ValueError,
             match="repo_url should begin with 'https://', found http://",
         ):
-            github_api.get_readme_content(
+            client_fixture.get_readme_content(
                 repo_url="http://NOT_SUPPORTED",
-                pat="foo",
-                agent="bar",
             )
+        with pytest.raises(
+            ValueError,
+            match="Did not find expected url Structure for https://foobar",
+        ):
+            client_fixture.get_readme_content(repo_url="https://foobar")
 
-    def test_get_readme_content(self):
+    def test_get_readme_content(self, client_fixture):
         """Mocked test ensuring byte code returned as expected string."""
         # Mock the response of the get_readme_content function
         mock_response = requests.Response()
@@ -115,31 +131,39 @@ class TestGetReadmeContent(object):
         _bytes = _b1 + _b2
         mock_response._content = _bytes
 
-        # Mock the requests.get call inside get_readme_content. Needs to
-        # match requests.get usage in the module.
+        # Mock the requests.get call inside get_readme_content.
         when(requests).get(...).thenReturn(mock_response)
         # Call & assert
-        result = github_api.get_readme_content(
-            "https://github.com/owner/repo", "fake_pat", "fake_agent"
+        result = client_fixture.get_readme_content(
+            "https://github.com/owner/repo",
         )
         assert result == "This is the README content"
         unstub()
 
         # repeat for accept HTML
         when(requests).get(...).thenReturn(mock_response)
-        result = github_api.get_readme_content(
+        result = client_fixture.get_readme_content(
             "https://github.com/owner/repo",
-            "fake_pat",
-            "fake_agent",
             accept="application/vnd.github.html+json",
         )
+        assert result == "This is the README content"
         unstub()
 
+    def test_get_readme_content_bad_response(self, client_fixture):
+        """Test that bad response is handled as expected."""
+        mock_bad_resp = requests.Response()
+        mock_bad_resp.status_code = 404
+        mock_bad_resp.reason = "Page not found"
+        when(requests).get(...).thenReturn(mock_bad_resp)
+        with pytest.raises(
+            requests.exceptions.HTTPError,
+            match="HTTP error 404: Page not found",
+        ):
+            client_fixture.get_readme_content(
+                "https://github.com/some-owner/some-repo"
+            )
 
-class TestExtractYamlFromMd:
-    """Tests for extract_yaml_from_md()."""
-
-    def test_extract_valid_yaml(self):
+    def test_extract_valid_yaml(self, client_fixture):
         """Test extraction of valid YAML from Markdown content."""
         md_content = """
         # Sample README
@@ -158,10 +182,11 @@ class TestExtractYamlFromMd:
         # we need to unindent here, YAML is indent aware.
         md_content = textwrap.dedent(md_content)
         assert (
-            github_api.extract_yaml_from_md(md_content) == expected_output
+            client_fixture.extract_yaml_from_md(md_content)
+            == expected_output
         )
 
-    def test_extract_first_yaml_block_only(self):
+    def test_extract_first_yaml_block_only(self, client_fixture):
         """Test that only the first YAML block is extracted."""
         md_content = """
         # Sample README
@@ -178,10 +203,11 @@ class TestExtractYamlFromMd:
         """
         expected_output = {"key1": "value1"}
         assert (
-            github_api.extract_yaml_from_md(md_content) == expected_output
+            client_fixture.extract_yaml_from_md(md_content)
+            == expected_output
         )
 
-    def test_no_recognised_yaml_block(self):
+    def test_no_recognised_yaml_block(self, client_fixture):
         """Test that ValueError is raised when no YAML block is present."""
         md_content = """
         # Sample README
@@ -191,7 +217,7 @@ class TestExtractYamlFromMd:
         with pytest.raises(
             ValueError, match="No YAML found in `md_content`"
         ):
-            github_api.extract_yaml_from_md(md_content)
+            client_fixture.extract_yaml_from_md(md_content)
 
         # This scenario is also raised on a YAML code block formatted as
         # below.
@@ -205,9 +231,9 @@ class TestExtractYamlFromMd:
         with pytest.raises(
             ValueError, match="No YAML found in `md_content`"
         ):
-            github_api.extract_yaml_from_md(md_content)
+            client_fixture.extract_yaml_from_md(md_content)
 
-    def test_invalid_yaml(self):
+    def test_invalid_yaml(self, client_fixture):
         """Test that YAMLError is raised for invalid YAML content."""
         # Intentionally malformed YAML
         md_content = """
@@ -224,4 +250,4 @@ class TestExtractYamlFromMd:
         ```
         """
         with pytest.raises(YAMLError):
-            github_api.extract_yaml_from_md(md_content)
+            client_fixture.extract_yaml_from_md(md_content)

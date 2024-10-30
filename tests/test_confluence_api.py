@@ -11,8 +11,8 @@ from ai_nexus_backend.confluence_api import ConfluenceClient
 class TestConfluenceClient:
     """Tests for ConfluenceClient."""
 
-    @pytest.fixture(scope="class")
-    def mock_creds(self):
+    @pytest.fixture(scope="function")
+    def creds(self):
         """Returns placeholders for API authentication."""
         return {
             "MOCK_EMAIL": "foo",
@@ -20,55 +20,38 @@ class TestConfluenceClient:
             "MOCK_AGENT": "foobar",
         }
 
-    def test_confluence_client_init(self, mock_creds):
-        """Test properties on init"""
+    @pytest.fixture(scope="function")
+    def confluence_client(self, creds):
+        """Instantiate ConfluenceClient with placeholder creds."""
         client = ConfluenceClient(
-            atlassian_email=mock_creds["MOCK_EMAIL"],
-            atlassian_pat=mock_creds["MOCK_PAT"],
-            user_agent=mock_creds["MOCK_AGENT"],
+            creds["MOCK_EMAIL"],
+            creds["MOCK_PAT"],
+            creds["MOCK_AGENT"],
         )
+        return client
+
+    def test_confluence_client_init(self, creds, confluence_client):
+        """Test properties on init"""
+        client = confluence_client
         assert isinstance(client, ConfluenceClient)
         assert hasattr(client, "_ConfluenceClient__agent")
         assert hasattr(client, "_ConfluenceClient__email")
         assert hasattr(client, "_ConfluenceClient__pat")
         assert hasattr(client, "_session")
-        assert client._ConfluenceClient__agent == mock_creds["MOCK_AGENT"]
-        assert client._ConfluenceClient__email == mock_creds["MOCK_EMAIL"]
-        assert client._ConfluenceClient__pat == mock_creds["MOCK_PAT"]
+        assert client._ConfluenceClient__agent == creds["MOCK_AGENT"]
+        assert client._ConfluenceClient__email == creds["MOCK_EMAIL"]
+        assert client._ConfluenceClient__pat == creds["MOCK_PAT"]
         assert isinstance(client._session, Session)
-        assert (
-            client._session.headers["User-Agent"]
-            == mock_creds["MOCK_AGENT"]
-        )
+        assert client._session.headers["User-Agent"] == creds["MOCK_AGENT"]
         assert client._session.headers["Accept"] == "application/json"
         assert client._session.auth == (
-            mock_creds["MOCK_EMAIL"],
-            mock_creds["MOCK_PAT"],
+            creds["MOCK_EMAIL"],
+            creds["MOCK_PAT"],
         )
 
-    def test__url_defence(self, mock_creds):
-        """Test defensive utility raises as expected."""
-        client = ConfluenceClient(
-            mock_creds["MOCK_EMAIL"],
-            mock_creds["MOCK_PAT"],
-            mock_creds["MOCK_AGENT"],
-        )
-        with pytest.raises(TypeError, match=".* found <class 'int'>"):
-            client._url_defence(url=1)
-        with pytest.raises(TypeError, match=".* found <class 'float'>"):
-            client._url_defence(url=1.0)
-        with pytest.raises(TypeError, match=".* found <class 'bool'>"):
-            client._url_defence(url=False)
-        with pytest.raises(TypeError, match=".* found <class 'NoneType'>"):
-            client._url_defence(url=None)
-
-    def test__configure_atlassian(self, mock_creds):
+    def test__configure_atlassian(self, confluence_client):
         """Check that default requests session can be reconfigured."""
-        client = ConfluenceClient(
-            mock_creds["MOCK_EMAIL"],
-            mock_creds["MOCK_PAT"],
-            mock_creds["MOCK_AGENT"],
-        )
+        client = confluence_client
         new_sess = Session()
         new_sess.mount("https://", Retry(total=100))
         client._configure_atlassian(_session=new_sess)
@@ -77,7 +60,7 @@ class TestConfluenceClient:
             == new_sess.adapters["https://"].total
         )
 
-    def test_find_code_metadata(self, mock_creds):
+    def test_find_code_metadata(self, confluence_client):
         """Test find_code_metadata method with mocked response."""
 
         def mock_response(url):
@@ -99,11 +82,7 @@ class TestConfluenceClient:
             return MockResponse()
 
         # set up
-        client = ConfluenceClient(
-            atlassian_email=mock_creds["MOCK_EMAIL"],
-            atlassian_pat=mock_creds["MOCK_PAT"],
-            user_agent=mock_creds["MOCK_AGENT"],
-        )
+        client = confluence_client
         # single code block should pass -----------------------------------
         # Mock the _get_atlassian_page_content method
         url = "https://example.com/single_code_block"
@@ -142,7 +121,7 @@ class TestConfluenceClient:
             client.find_code_metadata(url)
         unstub()
 
-    def test_return_page_text(self, mock_creds):
+    def test_return_page_text(self, confluence_client):
         """Test return_page_text method with mocked response."""
 
         def mock_response(url):
@@ -181,11 +160,7 @@ class TestConfluenceClient:
             return MockResponse()
 
         # set up
-        client = ConfluenceClient(
-            atlassian_email=mock_creds["MOCK_EMAIL"],
-            atlassian_pat=mock_creds["MOCK_PAT"],
-            user_agent=mock_creds["MOCK_AGENT"],
-        )
+        client = confluence_client
 
         # Case where url exists, stub values ------------------------------
         url = "https://example.com/blog"

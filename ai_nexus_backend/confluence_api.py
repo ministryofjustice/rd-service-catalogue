@@ -5,7 +5,10 @@ import json
 from bs4 import BeautifulSoup
 from requests import HTTPError, Response
 
-from ai_nexus_backend.requests_utils import _configure_requests
+from ai_nexus_backend.requests_utils import (
+    _configure_requests,
+    _url_defence,
+)
 
 
 class ConfluenceClient:
@@ -46,15 +49,6 @@ class ConfluenceClient:
         self.__agent = user_agent
         self._session = self._configure_atlassian()
 
-    def _url_defence(self, url: str) -> None:
-        """Internal utility for defence checking urls."""
-        if not isinstance(url, str):
-            raise TypeError(f"`url` requires a string, found {type(url)}")
-        elif not url.startswith(r"https://"):
-            raise ValueError("`url` should start with 'https://'")
-        else:
-            pass
-
     def _configure_atlassian(self, _session=_configure_requests()):
         """Set up a request Session with retry & backoff spec."""
         _session.auth = (self.__email, self.__pat)
@@ -88,8 +82,6 @@ class ConfluenceClient:
         HTTPError
             If the HTTP request to the Confluence API fails.
         """
-        if not isinstance(url, str):
-            raise TypeError()
         resp = self._session.get(url)
         if resp.ok:
             self.response = resp
@@ -123,7 +115,7 @@ class ConfluenceClient:
         NotImplementedError
             If more than one code block is found on the page.
         """
-        self._url_defence(url)
+        _url_defence(url, param_nm="url")
         self._get_atlassian_page_content(url)  # updates self.response
         soup = BeautifulSoup(self.response.content, "html.parser")
         # there must be a single code element, cannot set or target an ID
@@ -152,6 +144,6 @@ class ConfluenceClient:
         str
             HTML text content.
         """
-        self._url_defence(url)
+        _url_defence(url, param_nm="url")
         self._get_atlassian_page_content(url)  # updates self.response
         return self.response.text
