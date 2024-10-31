@@ -154,6 +154,7 @@ class TestGithubClient:
         mock_bad_resp = requests.Response()
         mock_bad_resp.status_code = 404
         mock_bad_resp.reason = "Page not found"
+
         when(requests).get(...).thenReturn(mock_bad_resp)
         with pytest.raises(
             requests.exceptions.HTTPError,
@@ -162,6 +163,7 @@ class TestGithubClient:
             client_fixture.get_readme_content(
                 "https://github.com/some-owner/some-repo"
             )
+        unstub()
 
     def test_extract_valid_yaml(self, client_fixture):
         """Test extraction of valid YAML from Markdown content."""
