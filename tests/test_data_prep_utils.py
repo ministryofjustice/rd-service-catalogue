@@ -60,8 +60,8 @@ exp_dat = [
 class TestFetchData:
     """Testing the JSON metadata is fetched as expected.
 
-    The JSON at this path can be used to keep any edge cases, adding
-    new cases will need adding the expected return values to `exp_dat`.
+    The JSON at this path can be used to keep any edge cases, adding new
+    cases will need adding the expected return values to `exp_dat`.
     """
 
     json_pth = here("tests/data/metadata_example.json")
@@ -86,8 +86,8 @@ class TestTransformData:
     def test_transform_data_return_values(self):
         """Test return value of transform_data."""
         # expected list will contain one entry for every hard-coded
-        # `fields_to_search` that is not None as value for content key and
-        # entire metadata as dictionary for meta key.
+        # `fields_to_search` that is not None as value for content key
+        # and entire metadata as dictionary for meta key.
         exp_out = [
             {
                 "meta": {

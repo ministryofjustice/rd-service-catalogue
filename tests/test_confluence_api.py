@@ -30,6 +30,32 @@ class TestConfluenceClient:
         )
         return client
 
+    @pytest.fixture(scope="function")
+    def response_fixt(self):
+        """Return a mock response object with code block element."""
+
+        class MockResponse:
+            def __init__(self, url):
+                self.url = url
+
+            @property
+            def content(self):
+                if self.url == "https://example.com/no_code_block":
+                    return b"<div>No code block here</div>"
+                elif self.url == "https://example.com/json_code_block":
+                    return b'<code>{"title": "json project"}</code>'
+                elif self.url == "https://example.com/yaml_code_block":
+                    return b'<code>{"title": "yaml project"}</code>'
+                elif (
+                    self.url == "https://example.com/multiple_code_blocks"
+                ):
+                    return (
+                        b'<code>{"title": "first project"}</code>'
+                        + b'<code>{"title": "second project"}</code>'
+                    )
+
+        return MockResponse
+
     def test_confluence_client_init(self, creds, confluence_client):
         """Test properties on init"""
         client = confluence_client
@@ -60,74 +86,76 @@ class TestConfluenceClient:
             == new_sess.adapters["https://"].total
         )
 
-    def test_find_code_metadata(self, confluence_client):
-        """Test find_code_metadata method with mocked response."""
-
-        def mock_response(url):
-            """Return a mock response object with code block element."""
-
-            class MockResponse:
-                @property
-                def content(self):
-                    if url == "https://example.com/no_code_block":
-                        return b"<div>No code block here</div>"
-                    elif url == "https://example.com/single_code_block":
-                        return b'<code>{"title": "awesome project"}</code>'
-                    elif url == "https://example.com/multiple_code_blocks":
-                        return (
-                            b'<code>{"title": "first project"}</code>'
-                            + b'<code>{"title": "second project"}</code>'
-                        )
-
-            return MockResponse()
-
+    def test_extract_json_metadata(self, confluence_client, response_fixt):
+        """Test extract_json_metadata method with mocked response."""
         # set up
         client = confluence_client
         # single code block should pass -----------------------------------
         # Mock the _get_atlassian_page_content method
-        url = "https://example.com/single_code_block"
+        url = "https://example.com/json_code_block"
         when(client)._get_atlassian_page_content(url).thenReturn(
-            mock_response
+            response_fixt
         )
-        client.response = mock_response(url)
+        client.response = response_fixt(url)
         # Use and assert
-        metadata = client.find_code_metadata(url)
+        metadata = client.extract_json_metadata(url)
         # Assert the expected metadata
         assert isinstance(metadata, dict)
-        expected_metadata = {"title": "awesome project"}
+        expected_metadata = {"title": "json project"}
         assert metadata == expected_metadata
         unstub()
         # no code block must raise ----------------------------------------
         url = "https://example.com/no_code_block"
         when(client)._get_atlassian_page_content(url).thenReturn(
-            mock_response
+            response_fixt
         )
-        client.response = mock_response(url)
+        client.response = response_fixt(url)
+
         with pytest.raises(
             ValueError, match="No code elements were found on this page."
         ):
-            client.find_code_metadata(url)
+            client.extract_json_metadata(url)
         unstub()
         # multiple code blocks has not been implemented -------------------
         url = "https://example.com/multiple_code_blocks"
         when(client)._get_atlassian_page_content(url).thenReturn(
-            mock_response
+            response_fixt
         )
-        client.response = mock_response(url)
+        client.response = response_fixt(url)
+
         with pytest.raises(
             NotImplementedError,
             match="More than one code block was found on this page.",
         ):
-            client.find_code_metadata(url)
+            client.extract_json_metadata(url)
+        unstub()
+
+    def test_extract_yaml_metadata(self, confluence_client, response_fixt):
+        """Test extract_json_metadata method with mocked response."""
+        # set up
+        client = confluence_client
+        # single code block should pass -----------------------------------
+        # Mock the _get_atlassian_page_content method
+        url = "https://example.com/yaml_code_block"
+        when(client)._get_atlassian_page_content(url).thenReturn(
+            response_fixt
+        )
+        client.response = response_fixt(url)
+        # Use and assert
+        metadata = client.extract_yaml_metadata(url)
+        # Assert the expected metadata
+        assert isinstance(metadata, dict)
+        expected_metadata = {"title": "yaml project"}
+        assert metadata == expected_metadata
         unstub()
 
     def test_return_page_text(self, confluence_client):
         """Test return_page_text method with mocked response."""
 
-        def mock_response(url):
+        def mock_text_response(url):
             """Return a mock response object with code block element."""
 
-            class MockResponse:
+            class MockTextResponse:
                 bad_url = "https://example.com/doesnotexist"
                 good_url = "https://example.com/blog"
 
@@ -153,23 +181,25 @@ class TestConfluenceClient:
                         return True
 
                 def raise_for_status(self):
-                    """Simulate raising an HTTPError for bad responses."""
+                    """Simulate raising for bad responses."""
                     if self.status_code != 200:
                         raise ValueError(f"HTTP Error: {self.status_code}")
 
-            return MockResponse()
+            return MockTextResponse()
 
         # set up
         client = confluence_client
 
         # Case where url exists, stub values ------------------------------
         url = "https://example.com/blog"
-        when(client._session).get(url).thenReturn(mock_response(url))
-        client.response = mock_response(url)
+        when(client._session).get(url).thenReturn(mock_text_response(url))
+        client.response = mock_text_response(url)
         assert client.return_page_text(url) == "<p>Some content.</p>"
         unstub()
         # case where url doesn't exist ------------------------------------
         url = "https://example.com/doesnotexist"
-        when(client._session).get(url).thenReturn(mock_response(url))
+        when(client._session).get(url).thenReturn(mock_text_response(url))
+
         with pytest.raises(ValueError, match="HTTP Error: 404"):
             client.return_page_text(url)
+        unstub()

@@ -1,6 +1,7 @@
 """
-Example implementation for transforming data for the service catalogue into
-a format that can be accepted by the Haystack/Opensearch indexing pipeline.
+Example implementation for transforming data for the service catalogue
+into a format that can be accepted by the Haystack/Opensearch indexing
+pipeline.
 
 This script requires two arguments: one for the input json file, one for
 the output.

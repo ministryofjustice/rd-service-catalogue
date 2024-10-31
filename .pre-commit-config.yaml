@@ -18,7 +18,7 @@ repos:
     hooks:
     -   id: flake8
         name: flake8 - Python linting
-        args: [--max-line-length=75]
+        args: [--max-line-length=79]
 
   - repo: https://github.com/psf/black
     rev: b965c2a5026f8ba399283ba3e01898b012853c79 # pragma: allowlist secret - v24.8.0
@@ -33,3 +33,11 @@ repos:
       hooks:
       -   id: detect-secrets
           exclude: .*ipynb # ignore false positive hashes in ipynb JSON
+  -   repo: https://github.com/kynan/nbstripout
+      rev: 3c241ca99c9ad788e1b1d0a7bc858d9af83a9976 # pragma: allowlist secret - v0.7.1
+      hooks:
+      -   id: nbstripout
+          name: nbstripout - Strip outputs from notebooks (auto-fixes)
+          args:
+          -   --extra-keys
+          -   "metadata.colab metadata.kernelspec cell.metadata.colab cell.metadata.executionInfo cell.metadata.id cell.metadata.outputId"

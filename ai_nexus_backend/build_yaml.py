@@ -1,6 +1,17 @@
 import pathlib
 
 import pandas as pd
+from yaml import safe_load, YAMLError
+
+
+def _parse_yaml(content_str: str) -> dict:
+    """Utility for safely converting content string to valid YAML"""
+    try:
+        # Parse the first YAML content block
+        yam = safe_load(content_str)
+        return {k.lower(): v for k, v in yam.items()}
+    except YAMLError as e:
+        raise YAMLError("Error parsing YAML content:", e)
 
 
 def build_listings_from_parquet(
@@ -10,8 +21,8 @@ def build_listings_from_parquet(
 ) -> None:
     """Create the yaml file required to build quarto listings.
 
-    Requires a parquet file of repo metadata and a template.txt, containing
-    the required yaml fields.
+    Requires a parquet file of repo metadata and a template.txt,
+    containing the required yaml fields.
 
     Parameters
     ----------
@@ -36,7 +47,7 @@ def build_listings_from_parquet(
             desc = r["description"]
             if desc:
                 # in cases where there is a description, some people use
-                # quotes and backslashes that need to be escaped/removed.
+                # quotes and backslashes that need to be escaped/removed
                 desc = desc.replace("\\", "").replace('"', '\\"')
             yaml_entry = template.format(
                 REPO_NM=r["name"].replace('"', '\\"'),

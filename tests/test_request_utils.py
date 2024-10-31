@@ -18,6 +18,7 @@ class Test_UrlDefence:
             _url_defence(url=False, param_nm="bool")
         with pytest.raises(TypeError, match=".* Found <class 'NoneType'>"):
             _url_defence(url=None, param_nm="Nonetype")
+
         # test values
         with pytest.raises(
             ValueError,
