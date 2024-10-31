@@ -18,8 +18,8 @@ def fetch_data(fname: str) -> list:
     :fname: Name/path of the json file to be read in
 
     Return
-    A list containing dictionaries with details of projects to include in
-    the catalogue.
+    A list containing dictionaries with details of projects to include
+    in the catalogue.
     """
 
     with open(fname) as f:
@@ -38,28 +38,28 @@ def fetch_data(fname: str) -> list:
 
 
 def _format_doc_dict(doc: dict, field: str) -> dict:
-    """
-    Reformat data into format accepted by Haystack.
+    """Reformat data into format accepted by Haystack.
+
     Here we wish to search over multiple fields, so we include the text
     from different fields in separate dictionaries within a list.
 
     Args
-    :doc: dictionary containing text data to search along with accompanying
-    metadata
-    :field: string corresponding to one of the dictionary keys, to indicate
-    the field to index the text from
+    :doc: dictionary containing text data to search along with
+    accompanying metadata
+    :field: string corresponding to one of the dictionary keys, to
+    indicate the field to index the text from
 
     Return
-    Dictionary containing two fields: 1) content to be searched (a string),
-    and 2) metadata (another dictionary)
+    Dictionary containing two fields: 1) content to be searched
+    (a string), and 2) metadata (another dictionary)
     """
 
     content = doc[field]
     # doc.pop(field)
 
     if content is None:
-        # We can't index None values, so returning None here allows us to
-        # skip fields where no info is provided
+        # We can't index None values, so returning None here allows us
+        # to skip fields where no info is provided
         return None
     else:
         meta = doc.copy()
@@ -75,8 +75,8 @@ def _format_doc_dict(doc: dict, field: str) -> dict:
 
 def transform_data(project_list: list) -> list:
     """
-    Transform the data underpinning the search engine by putting separate
-    fields to search over in separate dictionaries.
+    Transform the data underpinning the search engine by putting
+    separate fields to search over in separate dictionaries.
 
     Args
     :project_list: List of dictionaries containing project details
@@ -86,8 +86,8 @@ def transform_data(project_list: list) -> list:
     project.
     """
 
-    # If the data contains multiple fields we'd want to search over, list
-    # them here
+    # If the data contains multiple fields we'd want to search over,
+    # list them here
     fields_to_search = [
         "project_name",
         "description",

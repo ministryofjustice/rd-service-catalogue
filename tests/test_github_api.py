@@ -16,10 +16,10 @@ class TestGithubClient:
     """Mocked integration with GitHub Dev API.
 
     `_test_cases` and `_expected_endpoints` Used to test
-    `GithubClient._assemble_readme_endpoint_from_repo_url` matches target
-    repo URLs & constructs the necessary API endpoints. These test are
-    isolated from the GitHub developer API and will not require any
-    external configuration to run.
+    `GithubClient._assemble_readme_endpoint_from_repo_url` matches
+    target repo URLs & constructs the necessary API endpoints. These
+    test are isolated from the GitHub developer API and will not require
+    any external configuration to run.
     """
 
     _test_cases = [
@@ -76,7 +76,7 @@ class TestGithubClient:
     def test__assemble_readme_endpoint_from_repo_url_returns_expected_str(
         self, repo_url, endpoint_url, client_fixture
     ):
-        """Loop through every repo url, check func returns exp endpoint."""
+        """Loop through every url, check func returns exp endpoint."""
         assert (
             client_fixture._assemble_readme_endpoint_from_repo_url(
                 repo_url
@@ -91,6 +91,7 @@ class TestGithubClient:
             match="repo_url expected type str. Found <class 'int'>",
         ):
             client_fixture.get_readme_content(repo_url=1)
+
         with pytest.raises(
             TypeError,
             match="accept expected type str. Found <class 'int'>",
@@ -98,6 +99,7 @@ class TestGithubClient:
             client_fixture.get_readme_content(
                 repo_url="https://foobar", accept=1
             )
+
         with pytest.raises(
             ValueError,
             match=re.escape(
@@ -108,6 +110,7 @@ class TestGithubClient:
                 repo_url="https://foobar",
                 accept="wrong",
             )
+
         with pytest.raises(
             ValueError,
             match="repo_url should begin with 'https://', found http://",
@@ -115,6 +118,7 @@ class TestGithubClient:
             client_fixture.get_readme_content(
                 repo_url="http://NOT_SUPPORTED",
             )
+
         with pytest.raises(
             ValueError,
             match="Did not find expected url Structure for https://foobar",
@@ -156,6 +160,7 @@ class TestGithubClient:
         mock_bad_resp.reason = "Page not found"
 
         when(requests).get(...).thenReturn(mock_bad_resp)
+
         with pytest.raises(
             requests.exceptions.HTTPError,
             match="HTTP error 404: Page not found",
@@ -180,8 +185,8 @@ class TestGithubClient:
         More content here.
         """
         expected_output = {"key1": "value1", "key2": "value2"}
-        # As the test introduces indentation to the multistring 'markdown'
-        # we need to unindent here, YAML is indent aware.
+        # As the test introduces indentation to the multistring
+        # 'markdown' we need to unindent here, YAML is indent aware.
         md_content = textwrap.dedent(md_content)
         assert (
             client_fixture.extract_yaml_from_md(md_content)
@@ -210,12 +215,13 @@ class TestGithubClient:
         )
 
     def test_no_recognised_yaml_block(self, client_fixture):
-        """Test that ValueError is raised when no YAML block is present."""
+        """Test ValueError is raised when no YAML block is present."""
         md_content = """
         # Sample README
 
         Here is some content without YAML.
         """
+
         with pytest.raises(
             ValueError, match="No YAML found in `md_content`"
         ):
@@ -230,6 +236,7 @@ class TestGithubClient:
         key1: value
         ```
         """
+
         with pytest.raises(
             ValueError, match="No YAML found in `md_content`"
         ):
@@ -251,5 +258,6 @@ class TestGithubClient:
         - unclosed array
         ```
         """
+
         with pytest.raises(YAMLError):
             client_fixture.extract_yaml_from_md(md_content)

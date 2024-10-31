@@ -24,7 +24,8 @@ def _configure_requests(
     Returns
     -------
     requests.Session
-        The requests session configured with the specified retry strategy.
+        The requests session configured with the specified retry
+        strategy.
 
     """
     # configure scrape session

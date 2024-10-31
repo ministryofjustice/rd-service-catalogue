@@ -181,7 +181,7 @@ class TestConfluenceClient:
                         return True
 
                 def raise_for_status(self):
-                    """Simulate raising an HTTPError for bad responses."""
+                    """Simulate raising for bad responses."""
                     if self.status_code != 200:
                         raise ValueError(f"HTTP Error: {self.status_code}")
 

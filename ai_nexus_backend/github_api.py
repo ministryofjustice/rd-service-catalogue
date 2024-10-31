@@ -106,6 +106,8 @@ class GithubClient:
         ------
         PermissionError
             The PAT is not recognised by GitHub.
+            The PAT is valid but cannot access the resource - needs to
+            configure SSO.
 
         """
         page = 1
@@ -165,8 +167,8 @@ class GithubClient:
             _configure_requests() default values of n=5, backoff_f=0.1,
             force_on=[500, 502, 503, 504]
         public_only : bool
-            If the GitHub PAT has private scopes for the organisation you
-            are requesting, then private repo metadata will also be
+            If the GitHub PAT has private scopes for the organisation
+            you are requesting, then private repo metadata will also be
             returned. To filter to public repo matadata only, set this
             parameter to True. Defaults to True.
         debug: bool
@@ -184,9 +186,6 @@ class GithubClient:
         if public_only:
             params["type"] = "public"
 
-        # responses = self._paginated_get(
-        #     org_repos_url, sess=sess, pat=pat, params=params, agent=agent
-        # )
         responses = self._paginated_get(
             org_repos_url, sess=self._session, debug=debug
         )
@@ -283,7 +282,7 @@ class GithubClient:
         return all_meta
 
     def _assemble_readme_endpoint_from_repo_url(self, repo_url: str):
-        """Match owner & repo names from repo url. Return readme endpoint.
+        """Match owner & repo from repo url. Return readme endpoint.
 
         Created to help testing regex pattern.
         """
@@ -392,9 +391,10 @@ class GithubClient:
             If there is an error parsing the YAML content.
 
         """
-        # Regular expression pattern to match the FIRST fenced YAML block
-        # won't match curly braces: https://regex101.com/r/oYHdwB/1
-        # though curly braces are valid github MD YAML blocks:
+        # Regular expression pattern to match the FIRST fenced YAML
+        # block won't match curly braces:
+        # https://regex101.com/r/oYHdwB/1 though curly braces are valid
+        # github MD YAML blocks:
         # https://github.com/r-leyshon/example_yaml-_metadata
         yaml_block_pattern = re.compile(r"```yaml([\s\S]*?)```")
 

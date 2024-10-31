@@ -21,8 +21,8 @@ def build_listings_from_parquet(
 ) -> None:
     """Create the yaml file required to build quarto listings.
 
-    Requires a parquet file of repo metadata and a template.txt, containing
-    the required yaml fields.
+    Requires a parquet file of repo metadata and a template.txt,
+    containing the required yaml fields.
 
     Parameters
     ----------
@@ -47,7 +47,7 @@ def build_listings_from_parquet(
             desc = r["description"]
             if desc:
                 # in cases where there is a description, some people use
-                # quotes and backslashes that need to be escaped/removed.
+                # quotes and backslashes that need to be escaped/removed
                 desc = desc.replace("\\", "").replace('"', '\\"')
             yaml_entry = template.format(
                 REPO_NM=r["name"].replace('"', '\\"'),

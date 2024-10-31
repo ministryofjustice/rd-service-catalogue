@@ -5,7 +5,7 @@ from ai_nexus_backend.github_api import GithubClient
 
 # set to True for chatty outputs
 debug = False
-# configure secrets -------------------------------------------------------
+# configure secrets -----------------------------------------------------------
 
 secrets = dotenv.dotenv_values(".env")
 user_agent = secrets["AGENT"]
@@ -15,7 +15,7 @@ org_nm2 = secrets["ORG_NM2"]
 
 client = GithubClient(github_pat=pat, user_agent=user_agent)
 
-# gulp data ---------------------------------------------------------------
+# gulp data -------------------------------------------------------------------
 
 for nm in [org_nm1, org_nm2]:
     repos = client.get_org_repos(
@@ -36,11 +36,11 @@ for nm in [org_nm1, org_nm2]:
         org_nm=nm,
     )
 
-    # join tables ---------------------------------------------------------
+    # join tables -------------------------------------------------------------
     for tab in [repos, custom_props, topics]:
         tab.set_index("repo_url", inplace=True)
     out = repos.join(custom_props).join(topics)
 
-    # write parquet -------------------------------------------------------
+    # write parquet -----------------------------------------------------------
     out_pth = f"data/{nm}.parquet"
     out.to_parquet(here(out_pth))
