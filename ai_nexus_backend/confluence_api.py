@@ -98,6 +98,8 @@ class ConfluenceClient:
         self._get_atlassian_page_content(url)  # updates self.response
         soup = BeautifulSoup(self.response.content, "html.parser")
         # there must be a single code element, cannot set or target an ID
+        # in Confluence apparently, reference:
+        # https://community.atlassian.com/t5/Confluence-questions/Is-it-possible-to-create-ID-s-for-web-elements/qaq-p/1891040
         code_elements = soup.find_all("code")
         n = len(code_elements)
         if n == 0:
