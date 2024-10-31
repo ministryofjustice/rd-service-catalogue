@@ -110,6 +110,7 @@ class TestConfluenceClient:
             response_fixt
         )
         client.response = response_fixt(url)
+
         with pytest.raises(
             ValueError, match="No code elements were found on this page."
         ):
@@ -121,6 +122,7 @@ class TestConfluenceClient:
             response_fixt
         )
         client.response = response_fixt(url)
+
         with pytest.raises(
             NotImplementedError,
             match="More than one code block was found on this page.",
@@ -197,5 +199,7 @@ class TestConfluenceClient:
         # case where url doesn't exist ------------------------------------
         url = "https://example.com/doesnotexist"
         when(client._session).get(url).thenReturn(mock_text_response(url))
+
         with pytest.raises(ValueError, match="HTTP Error: 404"):
             client.return_page_text(url)
+        unstub()
