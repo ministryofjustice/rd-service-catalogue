@@ -38,7 +38,7 @@ class ConfluenceClient:
     Methods
     -------
     extract_json_metadata(url:str) -> dict
-        Ectract metadata from a site with a JSON code block.
+        Extract metadata from a site with a JSON code block.
     extract_yaml_metadata(url:str) -> dict
         Extracts metadata from a site with a YAML code block.
     return_page_text(url:str) -> str
