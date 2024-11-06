@@ -64,8 +64,7 @@ class GithubClient:
         self.__agent = user_agent
         self._session = self._configure_github()
         self.repos = pd.DataFrame()
-        self.topics = pd.DataFrame()
-        self.custom_properties = pd.DataFrame()
+        self.metadata = pd.DataFrame()
 
     def _configure_github(self, _session=_configure_requests()):
         """Set up a GitHub request Session with retry & backoff spec."""
@@ -234,7 +233,7 @@ class GithubClient:
         """Get every repo metadata item for entire org.
 
         Currently only supports metadata values "custom_properties" or
-        "topics".
+        "topics". Updates self.metadata attribute.
 
         Parameters
         ----------
@@ -277,6 +276,8 @@ class GithubClient:
                 {"repo_url": repo_url, m: [repo_meta.json()]}
             )
             all_meta = pd.concat([all_meta, current_row])
+
+        self.metadata = all_meta
         return all_meta
 
     def _assemble_readme_endpoint_from_repo_url(self, repo_url: str):
