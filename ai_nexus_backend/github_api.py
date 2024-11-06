@@ -204,6 +204,7 @@ class GithubClient:
             for j in i:
                 repo_deets = pd.DataFrame(
                     {
+                        "id": [j["id"]],
                         "html_url": [j["html_url"]],
                         "repo_url": [j["url"]],
                         "is_private": [j["private"]],
