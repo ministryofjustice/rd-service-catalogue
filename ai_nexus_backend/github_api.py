@@ -259,10 +259,8 @@ class GithubClient:
         m = metadata.lower().strip()
         if m == "custom_properties":
             url_slug = "properties/values"
-            target_attr = self.custom_properties
         elif m == "topics":
             url_slug = m
-            target_attr = self.topics
         else:
             raise NotImplementedError(
                 "Metadata 'custom_properties' and 'topics' are supported"
@@ -279,7 +277,6 @@ class GithubClient:
                 {"repo_url": repo_url, m: [repo_meta.json()]}
             )
             all_meta = pd.concat([all_meta, current_row])
-        setattr(obj=self, name=target_attr, value=all_meta)
         return all_meta
 
     def _assemble_readme_endpoint_from_repo_url(self, repo_url: str):
