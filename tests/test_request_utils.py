@@ -51,7 +51,7 @@ class Test_UrlDefence:
         with pytest.raises(HTTPError, match=f"HTTP error {code}:\n{msg}"):
             _handle_response(error_response)
 
-    def test__handle_response_success():
+    def test__handle_response_success(self):
         """Test that a successful response is returned as is."""
         # Simulate a successful response
         success_response = Response()
