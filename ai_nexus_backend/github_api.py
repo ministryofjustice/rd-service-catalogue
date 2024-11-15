@@ -346,21 +346,20 @@ class GithubClient:
             )
         params = {"accept": accept}
         endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
-        resp = requests.get(
-            endpoint, params=params, headers=self._session.headers
-        )
-        if resp.ok:
-            content = resp.json()
-            # decode from base64
-            if (
-                "content" in content.keys()
-                and content.get("encoding") == "base64"
-            ):
-                readme = b64decode(content.get("content")).decode("utf-8")
-        else:
-            raise HTTPError(
-                f"HTTP error {resp.status_code}: {resp.reason}"
+        resp = _handle_response(
+            requests.get(
+                endpoint, params=params, headers=self._session.headers
             )
+        )
+        # _handle response will raise if resp is not ok
+        content = resp.json()
+        # decode from base64
+        if (
+            "content" in content.keys()
+            and content.get("encoding") == "base64"
+        ):
+            readme = b64decode(content.get("content")).decode("utf-8")
+
         return readme
 
     def extract_yaml_from_md(self, md_content: str) -> dict:

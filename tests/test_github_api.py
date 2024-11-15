@@ -163,7 +163,7 @@ class TestGithubClient:
 
         with pytest.raises(
             requests.exceptions.HTTPError,
-            match="HTTP error 404: Page not found",
+            match="HTTP error 404:\nPage not found",
         ):
             client_fixture.get_readme_content(
                 "https://github.com/some-owner/some-repo"
