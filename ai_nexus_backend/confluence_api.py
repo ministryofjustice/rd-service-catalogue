@@ -3,11 +3,12 @@
 import json
 
 from bs4 import BeautifulSoup
-from requests import HTTPError, Response
+from requests import Response
 
 from ai_nexus_backend.build_yaml import _parse_yaml
 from ai_nexus_backend.requests_utils import (
     _configure_requests,
+    _handle_response,
     _url_defence,
 )
 
@@ -83,12 +84,9 @@ class ConfluenceClient:
         HTTPError
             If the HTTP request to the Confluence API fails.
         """
-        resp = self._session.get(url)
-        if resp.ok:
-            self.response = resp
-            return resp
-        else:
-            raise HTTPError(resp.raise_for_status())
+        resp = _handle_response(self._session.get(url))
+        self.response = resp
+        return resp
 
     def _find_code_metadata(self, url: str) -> dict:
         """Update meta_text attribute with content str from url."""

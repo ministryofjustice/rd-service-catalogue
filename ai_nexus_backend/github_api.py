@@ -2,6 +2,7 @@
 
 from base64 import b64decode
 import re
+from typing import Union
 
 import pandas as pd
 import requests
@@ -10,6 +11,7 @@ from requests.exceptions import HTTPError
 from ai_nexus_backend.build_yaml import _parse_yaml
 from ai_nexus_backend.requests_utils import (
     _configure_requests,
+    _handle_response,
     _url_defence,
 )
 
@@ -64,8 +66,7 @@ class GithubClient:
         self.__agent = user_agent
         self._session = self._configure_github()
         self.repos = pd.DataFrame()
-        self.topics = pd.DataFrame()
-        self.custom_properties = pd.DataFrame()
+        self.metadata = pd.DataFrame()
 
     def _configure_github(self, _session=_configure_requests()):
         """Set up a GitHub request Session with retry & backoff spec."""
@@ -204,6 +205,7 @@ class GithubClient:
             for j in i:
                 repo_deets = pd.DataFrame(
                     {
+                        "id": [j["id"]],
                         "html_url": [j["html_url"]],
                         "repo_url": [j["url"]],
                         "is_private": [j["private"]],
@@ -233,7 +235,7 @@ class GithubClient:
         """Get every repo metadata item for entire org.
 
         Currently only supports metadata values "custom_properties" or
-        "topics".
+        "topics". Updates self.metadata attribute.
 
         Parameters
         ----------
@@ -258,10 +260,8 @@ class GithubClient:
         m = metadata.lower().strip()
         if m == "custom_properties":
             url_slug = "properties/values"
-            target_attr = self.custom_properties
         elif m == "topics":
             url_slug = m
-            target_attr = self.topics
         else:
             raise NotImplementedError(
                 "Metadata 'custom_properties' and 'topics' are supported"
@@ -273,15 +273,18 @@ class GithubClient:
             print(f"Get {m} for {repo_nm}, {i+1}/{n_repos} done.")
             repo_url = f"https://api.github.com/repos/{org_nm}/{repo_nm}"
             query_url = f"{repo_url}/{url_slug}"
-            repo_meta = self._session.get(query_url)
+            repo_meta = _handle_response(self._session.get(query_url))
             current_row = pd.DataFrame(
                 {"repo_url": repo_url, m: [repo_meta.json()]}
             )
             all_meta = pd.concat([all_meta, current_row])
-        setattr(obj=self, name=target_attr, value=all_meta)
+
+        self.metadata = all_meta
         return all_meta
 
-    def _assemble_readme_endpoint_from_repo_url(self, repo_url: str):
+    def _assemble_readme_endpoint_from_repo_url(
+        self, repo_url: str
+    ) -> str:
         """Match owner & repo from repo url. Return readme endpoint.
 
         Created to help testing regex pattern.
@@ -302,7 +305,7 @@ class GithubClient:
         self,
         repo_url: str,
         accept: str = "application/vnd.github+json",
-    ):
+    ) -> Union[str, None]:
         """Fetches the README content from a single GitHub repository.
 
         Parameters
@@ -315,8 +318,9 @@ class GithubClient:
 
         Returns
         -------
-        str
-            The content of the README file.
+        Union[str, None]
+            The content of the README file or None if encoding is not
+            base64.
 
         Raises
         ------
@@ -346,21 +350,19 @@ class GithubClient:
             )
         params = {"accept": accept}
         endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
-        resp = requests.get(
-            endpoint, params=params, headers=self._session.headers
-        )
-        if resp.ok:
-            content = resp.json()
-            # decode from base64
-            if (
-                "content" in content.keys()
-                and content.get("encoding") == "base64"
-            ):
-                readme = b64decode(content.get("content")).decode("utf-8")
-        else:
-            raise HTTPError(
-                f"HTTP error {resp.status_code}: {resp.reason}"
+        resp = _handle_response(
+            requests.get(
+                endpoint, params=params, headers=self._session.headers
             )
+        )
+        # _handle response will raise if resp is not ok
+        content = resp.json()
+        # decode from base64
+        if content.get("encoding") != "base64":
+            raise ValueError("Encoding is not base64")
+        else:
+            readme = b64decode(content.get("content")).decode("utf-8")
+
         return readme
 
     def extract_yaml_from_md(self, md_content: str) -> dict:
