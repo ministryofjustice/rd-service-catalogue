@@ -10,6 +10,7 @@ from requests.exceptions import HTTPError
 from ai_nexus_backend.build_yaml import _parse_yaml
 from ai_nexus_backend.requests_utils import (
     _configure_requests,
+    _handle_response,
     _url_defence,
 )
 
@@ -271,7 +272,7 @@ class GithubClient:
             print(f"Get {m} for {repo_nm}, {i+1}/{n_repos} done.")
             repo_url = f"https://api.github.com/repos/{org_nm}/{repo_nm}"
             query_url = f"{repo_url}/{url_slug}"
-            repo_meta = self._session.get(query_url)
+            repo_meta = _handle_response(self._session.get(query_url))
             current_row = pd.DataFrame(
                 {"repo_url": repo_url, m: [repo_meta.json()]}
             )

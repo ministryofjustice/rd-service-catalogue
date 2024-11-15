@@ -50,3 +50,13 @@ def _url_defence(
         )
     else:
         pass
+
+
+def _handle_response(resp: requests.Response) -> requests.Response:
+    """Standardises the approach to presenting request exceptions."""
+    if resp.ok:
+        return resp
+    else:
+        raise requests.HTTPError(
+            f"HTTP error {resp.status_code}:\n{resp.reason}"
+        )
