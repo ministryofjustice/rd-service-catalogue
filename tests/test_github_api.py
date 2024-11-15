@@ -170,6 +170,28 @@ class TestGithubClient:
             )
         unstub()
 
+    def test_get_readme_content_incorrect_encoding(self, client_fixture):
+        """Test that ValueError is raised for incorrect encoding."""
+        # Mock the response of the get_readme_content function
+        mock_response = requests.Response()
+        mock_response.status_code = 200
+        _b1 = b'{"content": "VGhpcyBpcyB0aGUgUkVBRE1FIGNvbnRlbnQ=",'
+        _b2 = b' "encoding": "utf-8"}'  # should be base64
+        _bytes = _b1 + _b2
+        mock_response._content = _bytes
+
+        # Mock the requests.get call inside get_readme_content.
+        when(requests).get(...).thenReturn(mock_response)
+
+        with pytest.raises(
+            ValueError,
+            match="Encoding is not base64",
+        ):
+            client_fixture.get_readme_content(
+                "https://github.com/owner/repo",
+            )
+        unstub()
+
     def test_extract_valid_yaml(self, client_fixture):
         """Test extraction of valid YAML from Markdown content."""
         md_content = """

@@ -2,6 +2,7 @@
 
 from base64 import b64decode
 import re
+from typing import Union
 
 import pandas as pd
 import requests
@@ -281,7 +282,9 @@ class GithubClient:
         self.metadata = all_meta
         return all_meta
 
-    def _assemble_readme_endpoint_from_repo_url(self, repo_url: str):
+    def _assemble_readme_endpoint_from_repo_url(
+        self, repo_url: str
+    ) -> str:
         """Match owner & repo from repo url. Return readme endpoint.
 
         Created to help testing regex pattern.
@@ -302,7 +305,7 @@ class GithubClient:
         self,
         repo_url: str,
         accept: str = "application/vnd.github+json",
-    ):
+    ) -> Union[str, None]:
         """Fetches the README content from a single GitHub repository.
 
         Parameters
@@ -315,8 +318,9 @@ class GithubClient:
 
         Returns
         -------
-        str
-            The content of the README file.
+        Union[str, None]
+            The content of the README file or None if encoding is not
+            base64.
 
         Raises
         ------
@@ -354,10 +358,11 @@ class GithubClient:
         # _handle response will raise if resp is not ok
         content = resp.json()
         # decode from base64
-        if (
-            "content" in content.keys()
-            and content.get("encoding") == "base64"
-        ):
+        if "content" not in content.keys():
+            readme = None
+        elif content.get("encoding") != "base64":
+            raise ValueError("Encoding is not base64")
+        else:
             readme = b64decode(content.get("content")).decode("utf-8")
 
         return readme
