@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2024-11-15
+
+### Added
+
+- `ai_nexus_backend.github_api.get_org_repos` now returns repository ID.
+
+### Changed
+
+- Refactor request exception handling
+
 ## [0.2.0] - 2024-10-28
 
 ### Added
