@@ -2,7 +2,7 @@
 
 from mockito import when, unstub
 import pytest
-from requests import Session
+from requests import HTTPError, Session
 from requests.adapters import Retry
 
 from ai_nexus_backend.confluence_api import ConfluenceClient
@@ -180,10 +180,12 @@ class TestConfluenceClient:
                     elif url == url2:
                         return True
 
-                def raise_for_status(self):
-                    """Simulate raising for bad responses."""
-                    if self.status_code != 200:
-                        raise ValueError(f"HTTP Error: {self.status_code}")
+                @property
+                def reason(self, url1=bad_url, url2=good_url):
+                    if url == url1:
+                        return "Not found"
+                    elif url == url2:
+                        return "Good response"
 
             return MockTextResponse()
 
@@ -200,6 +202,6 @@ class TestConfluenceClient:
         url = "https://example.com/doesnotexist"
         when(client._session).get(url).thenReturn(mock_text_response(url))
 
-        with pytest.raises(ValueError, match="HTTP Error: 404"):
+        with pytest.raises(HTTPError, match="HTTP error 404:\nNot found"):
             client.return_page_text(url)
         unstub()
