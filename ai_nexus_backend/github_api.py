@@ -358,9 +358,7 @@ class GithubClient:
         # _handle response will raise if resp is not ok
         content = resp.json()
         # decode from base64
-        if "content" not in content.keys():
-            readme = None
-        elif content.get("encoding") != "base64":
+        if content.get("encoding") != "base64":
             raise ValueError("Encoding is not base64")
         else:
             readme = b64decode(content.get("content")).decode("utf-8")
