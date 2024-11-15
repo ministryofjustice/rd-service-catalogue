@@ -1,8 +1,9 @@
 """Tests for request_utils module."""
 
 import pytest
+from requests import HTTPError, Response
 
-from ai_nexus_backend.requests_utils import _url_defence
+from ai_nexus_backend.requests_utils import _handle_response, _url_defence
 
 
 class Test_UrlDefence:
@@ -25,3 +26,37 @@ class Test_UrlDefence:
             match="url should begin with 'https://', found http://",
         ):
             _url_defence(url="http://something", param_nm="url")
+
+    @pytest.mark.parametrize(
+        "code, msg",
+        [
+            (400, "Bad Request"),
+            (401, "Unauthorized"),
+            (403, "Forbidden"),
+            (404, "Not Found"),
+            (405, "Method Not Allowed"),
+            (500, "Internal Server Error"),
+            (502, "Bad Gateway"),
+            (503, "Service Unavailable"),
+            (504, "Gateway Timeout"),
+        ],
+    )
+    def test_handle_response_errors(self, code, msg):
+        """Test that an exception is raised for various error responses."""
+        # simulate bad responses
+        error_response = Response()
+        error_response.status_code = code
+        error_response.reason = msg
+
+        with pytest.raises(HTTPError, match=f"HTTP error {code}:\n{msg}"):
+            _handle_response(error_response)
+
+    def test__handle_response_success():
+        """Test that a successful response is returned as is."""
+        # Simulate a successful response
+        success_response = Response()
+        success_response.status_code = 200
+        success_response._content = b'{"key": "value"}'
+
+        result = _handle_response(success_response)
+        assert result == success_response
