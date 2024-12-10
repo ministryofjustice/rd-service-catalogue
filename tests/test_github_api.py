@@ -16,7 +16,7 @@ class TestGithubClient:
     """Mocked integration with GitHub Dev API.
 
     `_test_cases` and `_expected_endpoints` Used to test
-    `GithubClient._assemble_readme_endpoint_from_repo_url` matches
+    `GithubClient._assemble_endpoint_from_repo_url` matches
     target repo URLs & constructs the necessary API endpoints. These
     test are isolated from the GitHub developer API and will not require
     any external configuration to run.
@@ -73,14 +73,12 @@ class TestGithubClient:
     @pytest.mark.parametrize(
         "repo_url, endpoint_url", zip(_test_cases, _expected_endpoints)
     )
-    def test__assemble_readme_endpoint_from_repo_url_returns_expected_str(
+    def test__assemble_endpoint_from_repo_url_returns_expected_str(
         self, repo_url, endpoint_url, client_fixture
     ):
         """Loop through every url, check func returns exp endpoint."""
         assert (
-            client_fixture._assemble_readme_endpoint_from_repo_url(
-                repo_url
-            )
+            client_fixture._assemble_endpoint_from_repo_url(repo_url)
             == endpoint_url
         )
 
