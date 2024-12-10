@@ -1,6 +1,7 @@
 """Testing integration with github API."""
 
 # flake8: noqa E501
+from itertools import product
 import re
 import textwrap
 
@@ -10,6 +11,55 @@ import pytest
 from yaml import YAMLError
 
 from ai_nexus_backend import github_api
+
+
+_test_cases = [
+    "https://github.com/ministryofjustice/government-digital-strategy",
+    "https://github.com/ministryofjustice/moj-digital-strategy-2013",
+    "https://github.com/ministryofjustice/courtfinder",
+    "https://github.com/ministryofjustice/worddoc_convert",
+    "https://github.com/ministryofjustice/bba",
+    "https://github.com/ministryofjustice/smart-forms",
+    "https://github.com/ministryofjustice/opg-loadtest",
+    "https://github.com/ministryofjustice/moj_frontend_toolkit",
+    "https://github.com/ministryofjustice/moj_frontend_toolkit_gem",
+    "https://github.com/ministryofjustice/civil-claims-prototype",
+    "https://github.com/ministryofjustice/sleepy.mongoose",
+    "https://github.com/ministryofjustice/dist-wifi-mon",
+    "https://github.com/ministryofjustice/opg-deputies",
+    "https://github.com/ministryofjustice/opg-lpa-ruby-test",
+    "https://github.com/ministryofjustice/opg-lpa-api-ruby-test",
+    "https://github.com/ministryofjustice/x-moj-auth",
+    "https://github.com/ministryofjustice/devise_authentication_api",
+    "https://github.com/ministryofjustice/cla-can-you-get-legal-aid",
+    "https://github.com/ministryofjustice/calendars",
+]
+_endpoint_urls = [
+    "https://api.github.com/repos/ministryofjustice/government-digital-strategy/",
+    "https://api.github.com/repos/ministryofjustice/moj-digital-strategy-2013/",
+    "https://api.github.com/repos/ministryofjustice/courtfinder/",
+    "https://api.github.com/repos/ministryofjustice/worddoc_convert/",
+    "https://api.github.com/repos/ministryofjustice/bba/",
+    "https://api.github.com/repos/ministryofjustice/smart-forms/",
+    "https://api.github.com/repos/ministryofjustice/opg-loadtest/",
+    "https://api.github.com/repos/ministryofjustice/moj_frontend_toolkit/",
+    "https://api.github.com/repos/ministryofjustice/moj_frontend_toolkit_gem/",
+    "https://api.github.com/repos/ministryofjustice/civil-claims-prototype/redme",
+    "https://api.github.com/repos/ministryofjustice/sleepy.mongoose/",
+    "https://api.github.com/repos/ministryofjustice/dist-wifi-mon/",
+    "https://api.github.com/repos/ministryofjustice/opg-deputies/",
+    "https://api.github.com/repos/ministryofjustice/opg-lpa-ruby-test/",
+    "https://api.github.com/repos/ministryofjustice/opg-lpa-api-ruby-test/",
+    "https://api.github.com/repos/ministryofjustice/x-moj-auth/",
+    "https://api.github.com/repos/ministryofjustice/devise_authentication_api/",
+    "https://api.github.com/repos/ministryofjustice/cla-can-you-get-legal-aid/",
+    "https://api.github.com/repos/ministryofjustice/calendars/",
+]
+_metadatas = [
+    "readme",
+    "custom_properties",
+    "topics",
+]
 
 
 class TestGithubClient:
@@ -22,47 +72,13 @@ class TestGithubClient:
     any external configuration to run.
     """
 
-    _test_cases = [
-        "https://github.com/ministryofjustice/government-digital-strategy",
-        "https://github.com/ministryofjustice/moj-digital-strategy-2013",
-        "https://github.com/ministryofjustice/courtfinder",
-        "https://github.com/ministryofjustice/worddoc_convert",
-        "https://github.com/ministryofjustice/bba",
-        "https://github.com/ministryofjustice/smart-forms",
-        "https://github.com/ministryofjustice/opg-loadtest",
-        "https://github.com/ministryofjustice/moj_frontend_toolkit",
-        "https://github.com/ministryofjustice/moj_frontend_toolkit_gem",
-        "https://github.com/ministryofjustice/civil-claims-prototype",
-        "https://github.com/ministryofjustice/sleepy.mongoose",
-        "https://github.com/ministryofjustice/dist-wifi-mon",
-        "https://github.com/ministryofjustice/opg-deputies",
-        "https://github.com/ministryofjustice/opg-lpa-ruby-test",
-        "https://github.com/ministryofjustice/opg-lpa-api-ruby-test",
-        "https://github.com/ministryofjustice/x-moj-auth",
-        "https://github.com/ministryofjustice/devise_authentication_api",
-        "https://github.com/ministryofjustice/cla-can-you-get-legal-aid",
-        "https://github.com/ministryofjustice/calendars",
-    ]
     _expected_endpoints = [
-        "https://api.github.com/repos/ministryofjustice/government-digital-strategy/readme",
-        "https://api.github.com/repos/ministryofjustice/moj-digital-strategy-2013/readme",
-        "https://api.github.com/repos/ministryofjustice/courtfinder/readme",
-        "https://api.github.com/repos/ministryofjustice/worddoc_convert/readme",
-        "https://api.github.com/repos/ministryofjustice/bba/readme",
-        "https://api.github.com/repos/ministryofjustice/smart-forms/readme",
-        "https://api.github.com/repos/ministryofjustice/opg-loadtest/readme",
-        "https://api.github.com/repos/ministryofjustice/moj_frontend_toolkit/readme",
-        "https://api.github.com/repos/ministryofjustice/moj_frontend_toolkit_gem/readme",
-        "https://api.github.com/repos/ministryofjustice/civil-claims-prototype/readme",
-        "https://api.github.com/repos/ministryofjustice/sleepy.mongoose/readme",
-        "https://api.github.com/repos/ministryofjustice/dist-wifi-mon/readme",
-        "https://api.github.com/repos/ministryofjustice/opg-deputies/readme",
-        "https://api.github.com/repos/ministryofjustice/opg-lpa-ruby-test/readme",
-        "https://api.github.com/repos/ministryofjustice/opg-lpa-api-ruby-test/readme",
-        "https://api.github.com/repos/ministryofjustice/x-moj-auth/readme",
-        "https://api.github.com/repos/ministryofjustice/devise_authentication_api/readme",
-        "https://api.github.com/repos/ministryofjustice/cla-can-you-get-legal-aid/readme",
-        "https://api.github.com/repos/ministryofjustice/calendars/readme",
+        i[0] + i[1] for i in product(_endpoint_urls, _metadatas)
+    ]
+    # as we now have stacked parametrized with _metadatas, we need to
+    # repeat the test cases for the expected endpoints for every metadata.
+    _test_cases_repeated = [
+        item for item in _test_cases for _ in range(len(_metadatas))
     ]
 
     @pytest.fixture(scope="function")
@@ -71,14 +87,16 @@ class TestGithubClient:
         return github_api.GithubClient(github_pat="foo", user_agent="bar")
 
     @pytest.mark.parametrize(
-        "repo_url, endpoint_url", zip(_test_cases, _expected_endpoints)
+        "repo_url, endpoint_url",
+        zip(_test_cases_repeated, _expected_endpoints),
     )
     def test__assemble_endpoint_from_repo_url_returns_expected_str(
         self, repo_url, endpoint_url, client_fixture
     ):
         """Loop through every url, check func returns exp endpoint."""
+        meta = endpoint_url.split("/")[-1]
         assert (
-            client_fixture._assemble_endpoint_from_repo_url(repo_url)
+            client_fixture._assemble_endpoint_from_repo_url(repo_url, meta)
             == endpoint_url
         )
 
