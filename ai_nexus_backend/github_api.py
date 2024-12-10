@@ -51,9 +51,10 @@ class GithubClient:
     -------
     get_org_repos()
         Get all repositories for a specified GitHub organisation.
-    get_all_org_repo_metadata()
-        Get topics or custom properties for all repos in a GitHub
-        organisation.
+    get_repo_metadata()
+        Get metadata for a specified repo url.
+    get_all_repo_metadata()
+        Get topics or custom properties for a list of repo html_urls.
     get_readme_content()
         Get the README content for a single repository.
     extract_yaml_from_md()
