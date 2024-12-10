@@ -302,7 +302,7 @@ class GithubClient:
                 )
 
             current_row = pd.DataFrame(
-                {"repo_url": html_url, metadata: [repo_meta.json()]}
+                {"repo_url": html_url, metadata: [repo_meta]}
             )
             all_meta = pd.concat([all_meta, current_row])
             print(f"Get {metadata} for {html_url}, {i+1}/{n_repos} done.")
