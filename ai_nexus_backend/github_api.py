@@ -51,9 +51,10 @@ class GithubClient:
     -------
     get_org_repos()
         Get all repositories for a specified GitHub organisation.
-    get_all_org_repo_metadata()
-        Get topics or custom properties for all repos in a GitHub
-        organisation.
+    get_repo_metadata()
+        Get metadata for a specified repo url.
+    get_all_repo_metadata()
+        Get topics or custom properties for a list of repo html_urls.
     get_readme_content()
         Get the README content for a single repository.
     extract_yaml_from_md()
@@ -223,28 +224,58 @@ class GithubClient:
 
                 all_repo_deets = pd.concat([all_repo_deets, repo_deets])
 
+        all_repo_deets.reset_index(drop=True, inplace=True)
         self.repos = all_repo_deets
         return all_repo_deets
 
-    def get_all_org_repo_metadata(
+    def get_repo_metadata(self, html_url: str, metadata: str = "topics"):
+        """Query a single repo url for its metadata content.
+
+        Args:
+            html_url (str): The repo URL that you wish to return metadata
+            for.
+            metadata (str, optional): The metadata type, either "topics" or
+            "custom_properties". Defaults to "topics".
+
+        Raises:
+            NotImplementedError: Only metadata values of "topics" and
+            "custom_properties" are currently supported.
+
+        Returns:
+            requests.Response: Response from GitHub API server.
+        """
+        m = metadata.lower().strip()
+        if m == "custom_properties":
+            url_slug = "properties/values"
+        elif m == "topics":
+            url_slug = m
+        else:
+            raise NotImplementedError(
+                "Metadata 'custom_properties' and 'topics' are supported"
+            )
+        query_url = self._assemble_endpoint_from_repo_url(
+            html_url, url_slug
+        )
+        repo_meta = _handle_response(self._session.get(query_url))
+        return repo_meta
+
+    def get_all_repo_metadata(
         self,
+        html_urls: list,
         metadata: str,
-        repo_nms: list,
-        org_nm: str,
     ) -> pd.DataFrame:
-        """Get every repo metadata item for entire org.
+        """Get every repo metadata item for a list of repo html_urls.
 
         Currently only supports metadata values "custom_properties" or
         "topics". Updates self.metadata attribute.
 
         Parameters
         ----------
+        html_urls: list
+            Several repo urls to query.
+
         metadata: str
             Either "custom_properties" or "topics".
-        repo_nms : list,
-            List of the repo name strings
-        org_nm : str,
-            The name of the organisation, by default ORG_NM (from .env)
 
         Returns
         -------
@@ -257,35 +288,33 @@ class GithubClient:
             `metadata` is not either 'custom_properties' or 'topics'.
 
         """
-        m = metadata.lower().strip()
-        if m == "custom_properties":
-            url_slug = "properties/values"
-        elif m == "topics":
-            url_slug = m
-        else:
-            raise NotImplementedError(
-                "Metadata 'custom_properties' and 'topics' are supported"
-            )
-
         all_meta = pd.DataFrame()
-        n_repos = len(repo_nms)
-        for i, repo_nm in enumerate(repo_nms):
-            print(f"Get {m} for {repo_nm}, {i+1}/{n_repos} done.")
-            repo_url = f"https://api.github.com/repos/{org_nm}/{repo_nm}"
-            query_url = f"{repo_url}/{url_slug}"
-            repo_meta = _handle_response(self._session.get(query_url))
+        n_repos = len(html_urls)
+        for i, html_url in enumerate(html_urls):
+            try:
+                resp = self.get_repo_metadata(html_url, metadata)
+                repo_meta = resp.json()
+            except requests.exceptions.HTTPError:
+                repo_meta = None
+                print(
+                    f"Failed request, {resp.status_code}: {resp.reason}",
+                    f"{metadata} for {html_url} is None",
+                )
+
             current_row = pd.DataFrame(
-                {"repo_url": repo_url, m: [repo_meta.json()]}
+                {"repo_url": html_url, metadata: [repo_meta]}
             )
             all_meta = pd.concat([all_meta, current_row])
+            print(f"Get {metadata} for {html_url}, {i+1}/{n_repos} done.")
 
+        all_meta.reset_index(drop=True, inplace=True)
         self.metadata = all_meta
         return all_meta
 
-    def _assemble_readme_endpoint_from_repo_url(
-        self, repo_url: str
+    def _assemble_endpoint_from_repo_url(
+        self, repo_url: str, endpoint: str = "readme"
     ) -> str:
-        """Match owner & repo from repo url. Return readme endpoint.
+        """Match owner & repo from repo url. Return specified endpoint.
 
         Created to help testing regex pattern.
         """
@@ -295,7 +324,8 @@ class GithubClient:
         if cap_groups:
             owner = cap_groups.group(1)
             repo_nm = cap_groups.group(2)
-            return f"https://api.github.com/repos/{owner}/{repo_nm}/readme"
+            _url = f"https://api.github.com/repos/{owner}/{repo_nm}/"
+            return _url + endpoint
         else:
             raise ValueError(
                 f"Did not find expected url Structure for {repo_url}"
@@ -349,7 +379,7 @@ class GithubClient:
                 f"accept expects either {' or '.join(accept_vals)}"
             )
         params = {"accept": accept}
-        endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
+        endpoint = self._assemble_endpoint_from_repo_url(repo_url)
         resp = _handle_response(
             requests.get(
                 endpoint, params=params, headers=self._session.headers
