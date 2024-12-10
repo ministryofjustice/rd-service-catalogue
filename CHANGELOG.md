@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2024-12-10
+
+### Added
+
+- GitHubClient.get_repo_metadata
+    - Gets metadata for a single repo HTML URL.
+    - Topics and custom properties supported.
+
+### Changed
+
+- GitHubClient.get_all_org_repo_metadata -> GitHubClient.get_all_repo_metadata
+    - New implementation takes a list of HTML URLs instead of repo and
+    organisation names.
+
 ## [0.2.1] - 2024-11-15
 
 ### Added
