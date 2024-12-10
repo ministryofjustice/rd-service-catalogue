@@ -368,7 +368,7 @@ class GithubClient:
                 f"accept expects either {' or '.join(accept_vals)}"
             )
         params = {"accept": accept}
-        endpoint = self._assemble_readme_endpoint_from_repo_url(repo_url)
+        endpoint = self._assemble_endpoint_from_repo_url(repo_url)
         resp = _handle_response(
             requests.get(
                 endpoint, params=params, headers=self._session.headers
