@@ -224,6 +224,7 @@ class GithubClient:
 
                 all_repo_deets = pd.concat([all_repo_deets, repo_deets])
 
+        all_repo_deets.reset_index(drop=True, inplace=True)
         self.repos = all_repo_deets
         return all_repo_deets
 
@@ -290,13 +291,23 @@ class GithubClient:
         all_meta = pd.DataFrame()
         n_repos = len(html_urls)
         for i, html_url in enumerate(html_urls):
-            repo_meta = self.get_repo_metadata(html_url, metadata)
+            try:
+                resp = self.get_repo_metadata(html_url, metadata)
+                repo_meta = resp.json()
+            except requests.exceptions.HTTPError:
+                repo_meta = None
+                print(
+                    f"Failed request, {resp.status_code}: {resp.reason}",
+                    f"{metadata} for {html_url} is None",
+                )
+
             current_row = pd.DataFrame(
                 {"repo_url": html_url, metadata: [repo_meta.json()]}
             )
             all_meta = pd.concat([all_meta, current_row])
             print(f"Get {metadata} for {html_url}, {i+1}/{n_repos} done.")
 
+        all_meta.reset_index(drop=True, inplace=True)
         self.metadata = all_meta
         return all_meta
 
