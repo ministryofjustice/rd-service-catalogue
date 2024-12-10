@@ -13,7 +13,7 @@ exclude = [
 packages = ["./ai_nexus_backend"]
 [project]
 name = "ai_nexus_backend"
-version = "0.2.1"
+version = "0.3.0"
 requires-python = ">=3.9,<=3.13"
 description = "Modular component for AI-enabled application search backend."
 readme = "README.md"
