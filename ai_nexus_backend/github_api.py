@@ -60,6 +60,9 @@ class GithubClient:
         Get the README content for a single repository.
     extract_yaml_from_md()
         Get YAML metadata content from a README content string.
+    get_commits_for_html_url()
+        Get commits within an optional time window for a specified repo's
+        html url.
 
     """
 
