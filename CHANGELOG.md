@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.1] - 2025-02-20
+
+### Added
+
+- GithubClient._paginated_request has new logic for requesting commits
+within a time window of interest. Specifying a value for
+`timedelta_cutoff_days` means commits older than this value will not be
+returned.
+- GitHubClient.get_commits_for_html_url conveniently wraps the above so
+that all commits within a time window of interest can be returned for a
+given url.
 
 ## [0.3.0] - 2024-12-10
 
