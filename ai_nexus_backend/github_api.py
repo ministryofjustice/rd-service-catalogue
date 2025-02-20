@@ -2,6 +2,7 @@
 
 from base64 import b64decode
 import re
+import datetime as dt
 from typing import Union
 
 import pandas as pd
@@ -85,6 +86,7 @@ class GithubClient:
         url: str,
         sess: requests.Session = _configure_requests(),
         debug: bool = False,
+        timedelta_cutoff_days: Union[None, int] = None,
     ) -> list:
         """Get paginated responses.
 
@@ -98,6 +100,12 @@ class GithubClient:
             Session configured with retry strategy, by default
             _configure_requests() default values of n=5, backoff_f=0.1,
             force_on=[500, 502, 503, 504]
+        debug : bool
+            Print debugging statements if set to True. False by default.
+
+        timedelta_cutoff_days: int
+            Return commits only within this window. Only used if commits
+            endpoint is being queried.
 
         Returns
         -------
@@ -126,7 +134,36 @@ class GithubClient:
                 print(f"Paginated status code: {r.status_code}")
                 print(f"Response links: {r.links}")
             if r.ok:
-                responses.append(r.json())
+                page_resp = r.json()
+                if (
+                    timedelta_cutoff_days is not None
+                ) and "commits" in url:
+                    nw = dt.datetime.now()
+                    timedelta_exceeded = [
+                        (
+                            nw
+                            - dt.datetime.strptime(
+                                r.get("commit").get("author").get("date"),
+                                "%Y-%m-%dT%H:%M:%SZ",
+                            )
+                        ).days
+                        > timedelta_cutoff_days
+                        for r in page_resp
+                    ]
+                    # Subset responses to those <= cutoff
+                    page_resp_within_cutoff = [
+                        r
+                        for r, flag in zip(page_resp, timedelta_exceeded)
+                        if not flag
+                    ]
+                    if debug:
+                        print(f"Page responses: {page_resp}")
+                        print(f"Timedelta exceeded: {timedelta_exceeded}")
+                    if any(timedelta_exceeded):
+                        responses.append(page_resp_within_cutoff)
+                        break
+
+                responses.append(page_resp)
                 if "next" in r.links:
                     url = r.links["next"]["url"]
                     page += 1
@@ -437,3 +474,43 @@ class GithubClient:
             return _parse_yaml(yaml_content)
         else:
             raise ValueError("No YAML found in `md_content`")
+
+    def get_commits_for_html_url(
+        self,
+        html_url: str,
+        debug: bool = False,
+        timedelta_cutoff_days: Union[None, int] = None,
+    ) -> list:
+        """Return commits for a given repo's html_url.
+
+        Optionally return dates within daterange only.
+
+        Parameters
+        ----------
+
+        html_url: str
+            The HTML url for the repo.
+        debug: bool
+            Whether to print debugging statements. By default False.
+        timedelta_cutoff_days: Union[None, int]
+            Used to limit query volume to a time window. If not None, the
+            number of days since the commit was made will be compared to
+            today's date. The paginated queries will break when the first
+            commit with a date that is greater than this threshold is
+            encountered. By default None.
+
+        Returns
+        -------
+        list[list]
+            Nested list of paginated commits.
+        """
+        url = self._assemble_endpoint_from_repo_url(
+            html_url, endpoint="commits"
+        )
+        print(url)
+        resps = self._paginated_get(
+            url=url,
+            debug=debug,
+            timedelta_cutoff_days=timedelta_cutoff_days,
+        )
+        return resps
